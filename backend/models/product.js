@@ -98,17 +98,11 @@ const productSchema = new mongoose.Schema({
     },
     shelf: {
 		type: String,
-        required: true,
-        unique: true,
-        default: v4,
-        index: true
+        required: true
 	},
     deliveryVan: {
 		type: String,
         required: true,
-        unique: true,
-        default: v4,
-        index: true
 	},
     supplierNumber: {
         type: mongoose.Schema.Types.ObjectId,
