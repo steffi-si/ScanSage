@@ -1,8 +1,17 @@
 import {useAuth } from '../context/useAuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function Header() {
+    //
     const { isLoggedIn , logout } = useAuth();
+    const navigate = useNavigate();  //useNavigate is a hook that returns a navigate function
+
+    function handleLogout() {
+        logout();
+        navigate('/login');
+    }
 
     return (
         <header>
@@ -13,11 +22,14 @@ function Header() {
             <nav>
                 {isLoggedIn ? (
                     <>
-                        <button onClick={logout}>Logout</button>
+                        <button onClick={handleLogout}>Logout</button>
                         <a href="/">Back to Home</a>
                     </>
                 ) : (
-                    <p>Welcome! Please log in.</p>
+                    <>
+                        <Link to="/login"></Link>
+                        <p>Welcome! Please log in.</p>
+                    </>
                 )}
             </nav>
         </header>

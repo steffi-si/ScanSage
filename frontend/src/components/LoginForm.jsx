@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth} from '../context/useAuthContext';
+import { useNavigate } from 'react-router-dom';
 
 
 function LoginForm() {
@@ -10,12 +11,18 @@ function LoginForm() {
 
     //context
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     //event handlers
     function handleLogin(e) {
         e.preventDefault();
         //here we will add the login logic
         //for example API call to login
+        const token = ''; //get token from API
+
+        const userRole = ''; //get user role from API
+
+     
 
         //for now we will just check if username and password are admin
         if (username === 'admin' && password === 'admin') {
@@ -25,6 +32,9 @@ function LoginForm() {
         } else {
             setError('Invalid username or password');
         }
+
+        login(token, userRole);
+        navigate('/dashboard');
     }
 
     return(
