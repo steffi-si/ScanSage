@@ -99,8 +99,7 @@ const productSchema = new mongoose.Schema({
         required: true
 	},
     deliveryVan: {
-		type: String,
-        required: true,
+		type: String
 	},
     supplierNumber: {
         type: mongoose.Schema.Types.ObjectId,
