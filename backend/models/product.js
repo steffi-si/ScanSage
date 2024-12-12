@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { v4 } from "uuid";
 
+// SubSchema Price
 const priceSchema = new mongoose.Schema({
     nonBindingSalesPrice: {
         type: Number,
@@ -15,20 +16,17 @@ const priceSchema = new mongoose.Schema({
         type: Number,
         min: [0, "The amount must not be negative."],
         required: true
-    },
-    shippingCosts: {
-        type: Number,
-        min: [0, "The amount must not be negative."]
     }
 });
 
+// ProductSchema
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Product name is required."],
         trim: true,
         maxlength: [100, "Product name must not be longer than 100 characters"],
-        match: [/^[a-zA-Z0-9\s]+$/, "Only letters (a-z, A-Z), numbers (0-9) ans spaces are permitted."]
+        match: [/^[a-zA-Z0-9\s]+$/, "Only letters (a-z, A-Z), numbers (0-9) and spaces are permitted."]
     },
     productNumber: {
         type: String,
@@ -41,7 +39,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
         maxlength: [100, "Product name must not be longer than 100 characters"],
-        match: [/^[a-zA-Z0-9\s]+$/, "Only letters (a-z, A-Z), numbers (0-9) ans spaces are permitted."],
+        match: [/^[a-zA-Z0-9\s]+$/, "Only letters (a-z, A-Z), numbers (0-9) and spaces are permitted."],
         trim: true
     },
     price: priceSchema,

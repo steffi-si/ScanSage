@@ -1,25 +1,33 @@
 import mongoose from "mongoose";
-import { v4 } from "uuid";
+// Plugin for personnelNumber
+import AutoIncrementFactory from "mongoose-sequence";
+const AutoIncrement = AutoIncrementFactory(mongoose);
 
+// SubSchema address
 const addressDetailsSchema = new mongoose.Schema({
     street: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     houseNumber: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     postcode: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
+        trim: true
     },
     city: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     }
 });
 
+// SubSchema contact
 const contactDetailsSchema = new mongoose.Schema({
     phoneNumber: {
         type: String
@@ -34,6 +42,7 @@ const contactDetailsSchema = new mongoose.Schema({
     }
 });
 
+// UserSchema
 const userSchema = new mongoose.Schema({
     authorisationRole: {
         type: String,
@@ -42,10 +51,8 @@ const userSchema = new mongoose.Schema({
         default: "user"
     },
     personnelNumber: {
-        type: String,
-        required: true,
+        type: Number,
         unique: true,
-        default: v4,
         index: true
     },
     firstName: {
@@ -63,12 +70,15 @@ const userSchema = new mongoose.Schema({
     userName: {
         type: String,
         unique: true,
-        trim: true
+        trim: true,
+        index: true,
+        match: [/^[a-zA-Z0-9\s]+$/, "Only letters (a-z, A-Z), numbers (0-9) and spaces are permitted."]
     },
     password: {
         type: String,
         trim: true,
-        minlength: [8, "The selected password is too short and must be at least 8 characters long."]
+        minlength: [8, "The selected password is too short and must be at least 8 characters long."],
+        index: true
     },
     employedSince: {
         type: Date,
@@ -83,10 +93,18 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     supervisor: {
-        type: String,
-        trim: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    isLoggedIn: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 }, { timestamps: true });
+
+// config Plugin for personnelNumber
+userSchema.plugin(AutoIncrement, {inc_field: "personnelNumber", start_seq: 1000});
 
 const User = mongoose.model("User", userSchema);
 
