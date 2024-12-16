@@ -30,7 +30,6 @@ const productSchema = new mongoose.Schema({
     },
     productNumber: {
         type: String,
-        required: true,
         unique: true,
         default: v4,
         index: true
