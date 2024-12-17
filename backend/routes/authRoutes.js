@@ -2,13 +2,8 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import { checkTokenBlacklist } from "../middleware/checkTokenBlacklist.js"; 
-import { setAsync } from "../utils/redis.js";
 
 const router = express.Router();
-
-// Apply middleware to routes
-router.use(checkTokenBlacklist);
 
 // API Login
 router.post("/login", async (req, res) => {
@@ -23,7 +18,7 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(
             { userId: user._id, role: user.authorisationRole },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "7d" }
         );
 
         res.json({ token, user: {

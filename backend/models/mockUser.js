@@ -2,7 +2,7 @@ import User from "./user.js";
 import mongoose from "mongoose";
 
 const mockUsers = [
-    //User
+    // User
     {
         authorisationRole: "user",
         firstName: "Max",
@@ -66,7 +66,7 @@ const mockUsers = [
         birthday: new Date("1997-01-01"),
         department: "Account Management"
     },
-    //Manager
+    // Manager
     {
         authorisationRole: "manager",
         firstName: "Anna",
@@ -130,7 +130,7 @@ const mockUsers = [
         birthday: new Date("1987-03-01"),
         department: "Logistics"
     },
-    //Admin
+    // Admin
     {
         authorisationRole: "admin",
         firstName: "John",
