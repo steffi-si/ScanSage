@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useEffect , useState } from 'react';
+import { useAuth } from '../context/useAuthContext.jsx';
 import Header from '../views/Header.jsx';
 import Footer from '../views/Footer.jsx';
 
 
 function FeaturesPage() {
+    const { user } = useAuth();
     
 
 
@@ -15,7 +17,9 @@ function FeaturesPage() {
                 <FeatureCard title="Products" icon="📦" link="/product-overview" />
                 <FeatureCard title="Dashboard" icon="📊" link="/dashboard" />
                 <FeatureCard title="Delivery" icon="🚚" link="/delivery-details" />
+                {user.role === 'admin' && (
                 <FeatureCard title="User Management" icon="👤" link="/user-management" />
+                )}
                 <FeatureCard title="Statistics" icon="📈" link="/statistics" />
             </div>
             <Footer />

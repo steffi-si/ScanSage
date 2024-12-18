@@ -13,7 +13,7 @@ function ProductOverview() {
         //fetch request to get products
         const fetchProducts = async () => {
             try {
-                const response = await fetch('https://api.scansage.com/products');
+                const response = await fetch('https://localhost:3000/api/products');
                 if(!response.ok) {
                     throw new Error('Something went wrong!');
                 }

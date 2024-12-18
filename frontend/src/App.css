@@ -238,8 +238,58 @@ button {
 
 
 
+/*userMgtoverview Styling*/
+.user-mgt-overview {
+  padding: 20px;
+  background-color: #F7F7F7;
+}
 
+.filter-container {
+  margin-bottom: 30px;
+}
 
+.filter-container input {
+  width: 70%;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.user-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.user-card {
+  background-color: #4746463a;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.user-card:hover {
+  transform: scale(1.05);
+}
+
+.user-icon {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.user-card h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.user-card p {
+  margin: 5px 0;
+  color: #666;
+}
 
 
 
