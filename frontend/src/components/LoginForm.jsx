@@ -14,28 +14,48 @@ function LoginForm() {
     const navigate = useNavigate();
 
     //event handlers
-    function handleLogin(e) {
+    async function handleLogin(e) {
         e.preventDefault();
+        setError('');
         //here we will add the login logic
         //for example API call to login
-        const token = ''; //get token from API
+        try {
+            const response = await fetch('https://localhost:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
 
-        const userRole = ''; //get user role from API
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
 
-     
-
-        //for now we will just check if username and password are admin
-        if (username === 'admin' && password === 'admin') {
-            setError('');
-            login();  //calling login function from context
-            alert('Login successful');
-        } else {
+            const data = await response.json();
+            
+            login(data.token, data.userRole);
+            navigate('/dashboard');
+        } catch (err) {
             setError('Invalid username or password');
         }
+        }
 
-        login(token, userRole);
-        navigate('/dashboard');
-    }
+    //     //for now we will just check if username and password are admin
+    //     if (username === 'admin' && password === 'admin') {
+    //         setError('');
+    //         login();  //calling login function from context
+    //         alert('Login successful');
+    //     } else {
+    //         setError('Invalid username or password');
+    //     }
+
+    //     login(token, userRole);
+    //     navigate('/dashboard');
+    // }
 
     return(
         <div className="login-container">
