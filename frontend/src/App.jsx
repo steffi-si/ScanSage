@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { Routes, Route , Navigate} from "react-router-dom";
+import "./App.css";
+import Header from "./views/Header.jsx";
+import LoginForm from "./components/LoginForm.jsx";
+import { AuthProvider, useAuth } from "./context/useAuthContext.jsx";
+import FeaturesPage from "./pages/FeaturesPage.jsx";
+import ProductOverview from "./pages/ProductOverview.jsx";
+import UserMgtOverview from "./pages/UserMgtOverview.jsx";
+import Layout from "./Layout.jsx"
+import Footer from "./views/Footer.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+  {/*PrivateRoute componente*/}
+  const PrivateRoute = ({ children, allowedRoles }) => {
+    const {isLoggedIn, role } = useAuth();
+
+    if(!isLoggedIn) {
+      return <Navigate to="/" />;
+    }
+
+    if(allowedRoles && !allowedRoles.includes(role)) {
+      return <Navigate to="/app" />;
+    }
+
+    return children;
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <AuthProvider>
+        <Header />
+        <UserMgtOverview />
+        {/* Public Route*/}
+        <Routes>
+          <Route path="/" element={<LoginForm />} />
+
+         {/* Private Route*/}
+         <Route element={<Layout />}>
+          <Route 
+            path="/features" 
+            element={
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin']}>
+                <FeaturesPage />
+              </PrivateRoute>
+            }
+          />
+          <Route 
+            path="/product-overview" 
+            element={
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin']}>
+                <ProductOverview />
+              </PrivateRoute>
+            } 
+          />
+        </Route>
+
+
+        {/* Fallback Route*/}
+          <Route path="*" element={<Navigate to="/"  replace/>} />
+        </Routes>
+      </AuthProvider>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
