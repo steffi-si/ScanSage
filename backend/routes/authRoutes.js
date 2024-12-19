@@ -8,9 +8,10 @@ const router = express.Router();
 // API Login
 router.post("/login", async (req, res) => {
     try {
-        const { userName, password } = req.body;
-        const user = await User.findOne({ userName });
-
+        const { username, password } = req.body;
+      
+        const user = await User.findOne({ userName:username });
+       console.log(user);
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: "Invalid credentials" });
         }

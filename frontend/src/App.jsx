@@ -7,10 +7,13 @@ import { AuthProvider, useAuth } from "./context/useAuthContext.jsx";
 import FeaturesPage from "./pages/FeaturesPage.jsx";
 import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
-import Layout from "./Layout.jsx"
+import Layout from "./Layout.jsx";
+import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
 
 function App() {
+  const [popupMessage, setPopupMessage] = useState('');
+
   {/*PrivateRoute componente*/}
   const PrivateRoute = ({ children, allowedRoles }) => {
     const {isLoggedIn, role } = useAuth();
@@ -20,7 +23,9 @@ function App() {
     }
 
     if(allowedRoles && !allowedRoles.includes(role)) {
-      return <Navigate to="/app" />;
+      setPopupMessage("You are not authorized to access this page");
+      Navigate('/features');
+      return null;
     }
 
     return children;
@@ -30,7 +35,9 @@ function App() {
     <>
       <AuthProvider>
         <Header />
-        {/* <UserMgtOverview /> */}
+        {popupMessage && (
+          <Popup message={popupMessage} closePopup={() => setPopupMessage('')} />
+        )}
         {/* Public Route*/}
         <Routes>
           <Route path="/" element={<LoginForm />} />
@@ -52,6 +59,14 @@ function App() {
                 <ProductOverview />
               </PrivateRoute>
             } 
+          />
+          <Route 
+            path="/user-management" 
+            element={
+              <PrivateRoute allowedRoles={['admin', 'manager']}>
+                <UserMgtOverview />
+              </PrivateRoute>
+            }
           />
         </Route>
 

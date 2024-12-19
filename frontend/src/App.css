@@ -199,14 +199,17 @@ button {
 
 .product-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-  gap: 20px; 
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); 
+  gap: 40px; 
+  
 }
 
 .product-card {
-  background-color: #4746463a;
-  border: 1px solid #ccc;
+  width: 65%;
+  background-color: #c8d6d131;
+  border: 2px solid #ccc;
   border-radius: 5px; 
+  margin: 10px 0;
   padding: 10px;
   text-align: center; 
   box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
@@ -218,7 +221,7 @@ button {
 }
 
 .product-card img {
-  max-width: 100%; 
+  max-width: 60%; 
   height: auto; 
 }
 
@@ -226,14 +229,14 @@ button {
   display: inline-block;
   margin-top: 10px;
   padding: 10px;
-  background-color: #007BFF; 
-  color: white; 
+  background-color: #7ee7b3; 
+  color: rgb(29, 28, 28); 
   text-decoration: none;
   border-radius: 5px; 
 }
 
 .details-button:hover {
-  background-color: #0056b3; 
+  background-color: #00b32d; 
 }
 
 
@@ -292,8 +295,27 @@ button {
 }
 
 
+/*Popup-Message Styling */
+-popup-overlay {
+  position:fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-
+.popup-content {
+  background-color: #F7F7F7;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  text-align: center;
+}
 
 /*Footer*/
 footer {

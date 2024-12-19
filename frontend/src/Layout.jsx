@@ -11,7 +11,7 @@ function Layout() {
 
     return (
         <div className="layout">
-            <Header />
+            {/* <Header /> */}
             <main>
                 <Outlet />
             </main>

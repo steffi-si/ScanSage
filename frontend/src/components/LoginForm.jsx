@@ -20,7 +20,7 @@ function LoginForm() {
         //here we will add the login logic
         //for example API call to login
         try {
-            const response = await fetch('https://localhost:3000/api/login', {
+            const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -37,8 +37,8 @@ function LoginForm() {
 
             const data = await response.json();
             
-            login(data.token, data.userRole);
-            navigate('/dashboard');
+            login(data.token, data.user.role);
+            navigate('/features');
         } catch (err) {
             setError('Invalid username or password');
         }
