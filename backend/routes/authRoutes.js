@@ -8,8 +8,8 @@ const router = express.Router();
 // API Login
 router.post("/login", async (req, res) => {
     try {
-        const { userName, password } = req.body;
-        const user = await User.findOne({ userName });
+        const { username, password } = req.body;
+        const user = await User.findOne({ userName: username });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -41,9 +41,7 @@ router.post("/logout", async (req, res) => {
 
             res.json({ message: "Logout successful" });
         } catch (err) {
-            console.error("Redis error: ", err);
-
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Server error" });
         }
     } else {
         res.status(400).json({ message: "No token provided" });

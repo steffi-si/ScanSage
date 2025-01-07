@@ -19,6 +19,25 @@ const priceSchema = new mongoose.Schema({
     }
 });
 
+// SubSchema Barcode
+const barcodeSchema = new mongoose.Schema({
+    value: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true
+    },
+    format: {
+        type: String,
+        enum: ["EAN-13", "UPC", "CODE128", "QR"],
+        default: "CODE128"
+    },
+    lastScanned: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 // ProductSchema
 const productSchema = new mongoose.Schema({
     name: {
@@ -108,10 +127,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: [
-            "in stock", 
-            "almost sold out", 
+            "in stock",
+            "almost sold out",
             "sold out", 
-            "reordered", 
+            "reordered",
             "can not be reordered", 
             "stock transfer", 
             "packing station",
@@ -121,7 +140,8 @@ const productSchema = new mongoose.Schema({
             "delay in delivery"
         ],
         default: "in stock"
-    }
+    },
+    barcode: barcodeSchema
 }, { timestamps: true });
 
 const Product = mongoose.model("Product", productSchema);
