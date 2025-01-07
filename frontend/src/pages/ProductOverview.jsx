@@ -54,12 +54,6 @@ function ProductOverview() {
     fetchProducts();
   }, [categoryFilter, statusFilter, scannedCode, navigate]);
 
-  // if(loading) {
-  //     return <p>Loading...</p>;
-  // }
-  // if(error) {
-  //     return <p>{error}</p>;
-  // }
 
   return (
     <div className="product-overview">
