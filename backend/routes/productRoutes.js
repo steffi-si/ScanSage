@@ -6,11 +6,14 @@ const router = express.Router();
 // API product overview
 router.get("/", async (req, res) => {
     try {
-        const { category, name, status, page = 1, limit = 10 } = req.query;
+        const { category, name, status, barcode, page = 1, limit = 10 } = req.query;
         const query = {};
 
         if (category) {
             query.category = category;
+        }
+        if (barcode) {
+            query["barcode.value"] = barcode;
         }
         // Regular expression with i-flag (to ignore upper and lower case)
         if (name) { 
@@ -22,8 +25,8 @@ router.get("/", async (req, res) => {
 
         const totalCount = await Product.countDocuments(query);
         const products = await Product.find(query)
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
+            .limit(Number(limit))
+            .skip((Number(page) - 1) * Number(limit))
             // Return of a real promise
             .exec();
         
@@ -53,7 +56,7 @@ router.put("/:productNumber", async (req, res) => {
     try {
         const updatedProduct = await Product.findOneAndUpdate(
             { productNumber: req.params.productNumber },
-            // Return of the modified product
+            req.body,
             { new: true }
         )
 
@@ -73,7 +76,7 @@ router.delete("/:productNumber", async (req, res) => {
         const deletedProduct = await Product.findOneAndDelete({ productNumber: req.params.productNumber });
 
         if (!deletedProduct) {
-            return res.status(404).json({ message: "Prooduct not found" });
+            return res.status(404).json({ message: "Product not found" });
         }
 
         res.json({ message: "Product deleted successfully" });
@@ -82,13 +85,91 @@ router.delete("/:productNumber", async (req, res) => {
     }
 });
 
-// API new product
-router.post("/", async (req, res) => {
-    try {
-        const newProduct = new Product(req.body);
+// // API new product
+// router.post("/", async (req, res) => {
+//     try {
+//         const newProduct = new Product(req.body);
 
-        // Validate new product
-        const validationError = newProduct.validationSynch();
+//         // Validate new product
+//         const validationError = newProduct.validateSync();
+//         if (validationError) {
+//             return res.status(400).json({ message: "Validation error", errors: validationError.errors });
+//         }
+
+//         // Save new product
+//         const savedProduct = await newProduct.save();
+
+//         res.status(201).json({ message: "Product created successfully", product: savedProduct });
+//     } catch (err) {
+//         if (err.code === 11000) {
+//             // Duplicate key error (likely for productNumber)
+//             return res.status(400).json({ message: "Product with this number already exists" });
+//         }
+
+//         res.status(500).json({ message: "Server error", error: err.message });
+//     }
+// });
+
+// API edit barcode
+router.patch("/:productNumber/barcode", async (req, res) => {
+    try {
+        const { value, format } = req.body;
+        const updatedProduct = await Product.findOneAndUpdate(
+            { productNumber: req.params.productNumber },
+            {
+                $set: {
+                    "barcode.value": value,
+                    "barcode.format": format,
+                    "barcode.lastScanned": new Date()
+                }
+            },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.json({ updatedProduct });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// API simulate scan
+router.post("/:productNumber/scan", async (req, res) => {
+    try {
+        const updatedProduct = await Product.findOneAndUpdate(
+            { productNumber: req.params.productNumber },
+            { $set: { "barcode.lastScanned": new Date() } },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.json({ message: "Barcode scanned successfully", product: updatedProduct });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// API new product with barcode
+router.post("/with-barcode", async (req, res) => {
+    try {
+        const { barcode, ...productData } = req.body;
+        const newProduct = new Product({
+            ...productData,
+            barcode: {
+                value: barcode.value,
+                format: barcode.format,
+                lastScanned: new Date()
+            }
+        });
+
+        // validation
+        const validationError = newProduct.validateSync();
         if (validationError) {
             return res.status(400).json({ message: "Validation error", errors: validationError.errors });
         }
@@ -96,11 +177,11 @@ router.post("/", async (req, res) => {
         // Save new product
         const savedProduct = await newProduct.save();
 
-        res.status(201).json({ message: "Product created successfully", product: savedProduct });
+        res.status(201).json({ message: "Product created successfully with barcode", product: savedProduct });
     } catch (err) {
+        // Error with duplicate key (probably for productNumber or barcode value)
         if (err.code === 11000) {
-            // Duplicate key error (likely for productNumber)
-            return res.status(400).json({ message: "Product with this number already exists" });
+            return res.status(400).json({ message: "Product with this number or barcode already exists" });
         }
 
         res.status(500).json({ message: "Server error", error: err.message });
