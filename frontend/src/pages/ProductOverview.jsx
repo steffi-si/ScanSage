@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import Header from '../views/Header.jsx';
 import Footer from "../views/Footer.jsx";
+import { BarcodeScanner } from "react-barcode-scanner";
+import { Barcode } from "react-barcode";
 
 function ProductOverview() {
   const [products, setProducts] = useState([]);
@@ -9,9 +12,11 @@ function ProductOverview() {
   const [error, setError] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("allproducts");
   const [statusFilter, setStatusFilter] = useState("");
-  
-  useEffect(() => {
+  const [showScanner, setShowScanner] = useState(false);
+  const [scannedCode, setScannedCode] = useState("");
+  const navigate = useNavigate();
 
+  useEffect(() => {
     //fetch request to get products
     const fetchProducts = async () => {
       try {
@@ -26,22 +31,28 @@ function ProductOverview() {
         if (params.toString()) {
           url += "?" + params.toString();
         }
+        if(scannedCode) {
+          params.append("productNumber", scannedCode);
+        }
         const response = await fetch(url);
-        console.log('Response status:', response.status);
+        console.log("Response status:", response.status);
         if (!response.ok) {
           throw new Error("Something went wrong!");
         }
         const data = await response.json();
         setProducts(data.products);
+        if(scannedCode && data.products.length === 1) {
+          navigate(`/productdetail/${data.products[0].productNumber}`);
+        }
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false); //set loading to false
       }
-    }
+    };
 
     fetchProducts();
-    }, [categoryFilter, statusFilter]);
+  }, [categoryFilter, statusFilter, scannedCode, navigate]);
 
   // if(loading) {
   //     return <p>Loading...</p>;
@@ -53,7 +64,9 @@ function ProductOverview() {
   return (
     <div className="product-overview">
       <div className="toolbar">
-        <button className="scan-button">
+        <button className="scan-button" onClick={()=> 
+          setShowScanner(!showScanner)}
+        >
           <div icon="📱">Scan</div>
         </button>
         <FilterComponent
@@ -61,22 +74,34 @@ function ProductOverview() {
           onStatusChange={setStatusFilter}
         />
       </div>
+      {showScanner && <BarcodeReader onScan={(code)=> {
+        setScannedCode(code);
+        setShowScanner(false);
+      }} onError={(err)=> {
+        console.error(err);
+      }}/>}
       <div className="product-container">
-      <div className="product-overview">
-        {loading ? (
+        <div className="product-overview">
+          {loading ? (
             <p>Loading...</p>
-        ) : error ? (
+          ) : error ? (
             <p>Error: {error}</p>
-        ) : !Array.isArray(products) ? (
+          ) : !Array.isArray(products) ? (
             <p>Products is not an array</p>
-        ) : products.length === 0 ? (
+          ) : products.length === 0 ? (
             <p>No products available.</p>
-        ) : (
-            products.map(product => (
-                <ProductCard key={product.productNumber || product._id} product={product} />
+          ) : (
+            products.map((product) => (
+              <ProductCard
+                key={product.productNumber || product._id}
+                product={product}
+              />
             ))
-        )}
-    </div>
+          )}
+        </div>
+        <div>
+          <button className="back-button" onClick={() => navigate("/features")}>Back to FeaturesPage</button>
+        </div>
       </div>
       <Footer />
     </div>
@@ -84,21 +109,26 @@ function ProductOverview() {
 }
 
 function ProductCard({ product }) {
-  console.log("Product data:", product);  
+  // console.log("Product data:", product);
   return (
     <div className="product-card">
       {/* {product.image && <img src={product.image} alt={product.name} />} */}
       <h3>{product.name || "No name"}</h3>
-            <p>Product Number: {product.productNumber || "No number"}</p>
-            <p>Status: {product.status || "No status"}</p>
-            <p>Price: {product.price.sellingPrice ? `$${product.price.sellingPrice}` : "Price not available"}</p>
-            <Link
-                to={`/productdetail/${product.productNumber}`}
-                className="details-button"
-            >
-                Product Details
-            </Link>
-        </div>
+      <p>Product Number: {product.productNumber || "No number"}</p>
+      <p>Status: {product.status || "No status"}</p>
+      <p>
+        Price:{" "}
+        {product.price.sellingPrice
+          ? `$${product.price.sellingPrice}`
+          : "Price not available"}
+      </p>
+      <Link
+        to={`/productdetail/${product.productNumber}`}
+        className="details-button"
+      >
+        Product Details
+      </Link>
+    </div>
   );
 }
 
@@ -126,6 +156,23 @@ function FilterComponent({ onFilterChange, onStatusChange }) {
       </select>
     </div>
   );
+}
+
+function BarcodeReader({onScan, onError}) {
+  return(
+    <div className="barcode-scanner">
+    <BarcodeScanner
+      onUpdate={(err, result) => {
+        if (result) {
+          onScan(result.text);
+        }
+        if (err) {
+          onError(err);
+        }
+      }}
+      />
+    </div>
+  )
 }
 
 export default ProductOverview;

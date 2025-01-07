@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuthContext.jsx";
 
 function UserMgtOverview() {
@@ -10,6 +10,7 @@ function UserMgtOverview() {
   const [filterDepartment, setFilterDepartment] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
       console.log("fetchUsers");
@@ -89,6 +90,9 @@ function UserMgtOverview() {
         >
           Next
         </button>
+      </div>
+      <div>
+        <button className="back-button" onClick={() => navigate("/features")}>Back to Features</button>
       </div>
     </div>
   );
