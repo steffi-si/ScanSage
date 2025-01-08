@@ -29,7 +29,7 @@ const barcodeSchema = new mongoose.Schema({
     },
     format: {
         type: String,
-        enum: ["EAN-13", "UPC", "CODE128", "QR"],
+        enum: ["EAN13", "UPC", "CODE128", "QR"],
         default: "CODE128"
     },
     lastScanned: {
