@@ -21,7 +21,7 @@ const mockProducts = [
     },
     shelf: "A2",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -46,7 +46,7 @@ const mockProducts = [
     },
     shelf: "A3",
     supplierNumber: null,
-    status: "almost sold out",
+    status: "almost_sold_out",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -72,7 +72,7 @@ const mockProducts = [
     shelf: "B1",
     deliveryVan: "Van-1",
     supplierNumber: null,
-    status: "in delivery",
+    status: "in_delivery",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -97,7 +97,7 @@ const mockProducts = [
     },
     shelf: "B2",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -147,7 +147,7 @@ const mockProducts = [
     },
     shelf: "B4",
     supplierNumber: null,
-    status: "packing station",
+    status: "packing_station",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -172,7 +172,7 @@ const mockProducts = [
     },
     shelf: "C1",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -197,7 +197,7 @@ const mockProducts = [
     },
     shelf: "C1",
     supplierNumber: null,
-    status: "almost sold out",
+    status: "almost_sold_out",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -223,7 +223,7 @@ const mockProducts = [
     shelf: "C2",
     deliveryVan: "Van-2",
     supplierNumber: null,
-    status: "in delivery",
+    status: "in_delivery",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -248,7 +248,7 @@ const mockProducts = [
     },
     shelf: "C3",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -298,7 +298,7 @@ const mockProducts = [
     },
     shelf: "E2",
     supplierNumber: null,
-    status: "packing station",
+    status: "packing_station",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -323,7 +323,7 @@ const mockProducts = [
     },
     shelf: "F1",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -348,7 +348,7 @@ const mockProducts = [
     },
     shelf: "F2",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -374,7 +374,7 @@ const mockProducts = [
     shelf: "E3",
     deliveryVan: "Van-3",
     supplierNumber: null,
-    status: "in delivery",
+    status: "in_delivery",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -399,7 +399,7 @@ const mockProducts = [
     },
     shelf: "B5",
     supplierNumber: null,
-    status: "almost sold out",
+    status: "almost_sold_out",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -424,7 +424,7 @@ const mockProducts = [
     },
     shelf: "D6",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -474,7 +474,7 @@ const mockProducts = [
     },
     shelf: "C4",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -499,7 +499,7 @@ const mockProducts = [
     },
     shelf: "E4",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -524,7 +524,7 @@ const mockProducts = [
     },
     shelf: "C5",
     supplierNumber: null,
-    status: "in stock",
+    status: "in_stock",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -549,7 +549,7 @@ const mockProducts = [
     },
     shelf: "C6",
     supplierNumber: null,
-    status: "almost sold out",
+    status: "almost_sold_out",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -574,7 +574,7 @@ const mockProducts = [
     },
     shelf: "F4",
     supplierNumber: null,
-    status: "almost sold out",
+    status: "almost_sold_out",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -600,7 +600,7 @@ const mockProducts = [
     shelf: "C7",
     deliveryVan: "Van-4",
     supplierNumber: null,
-    status: "in delivery",
+    status: "in_delivery",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -626,7 +626,7 @@ const mockProducts = [
     shelf: "E5",
     deliveryVan: "Van-5",
     supplierNumber: null,
-    status: "in delivery",
+    status: "in_delivery",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -651,7 +651,7 @@ const mockProducts = [
     },
     shelf: "C8",
     supplierNumber: null,
-    status: "packing station",
+    status: "packing_station",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -676,7 +676,7 @@ const mockProducts = [
     },
     shelf: "F5",
     supplierNumber: null,
-    status: "packing station",
+    status: "packing_station",
     barcode: {
       value: uuidv4(),
       format: "CODE128",
@@ -687,21 +687,71 @@ const mockProducts = [
     name: "Portable charger",
     category: "Electronic",
     price: {
-      purchasePrice: 5.0,
-      sellingPrice: 15.0,
-      nonBindingSalesPrice: 12.0,
+      purchasePrice: 15.0,
+      sellingPrice: 30.0,
+      nonBindingSalesPrice: 25.0,
     },
-    expressDispatch: false,
-    availableColours: ["purple", "blue", "red", "green", "black"],
+    expressDispatch: true,
+    availableColours: ["white", "black"],
     fragile: false,
-    packagingSize: [23, 15, 10],
+    packagingSize: [15, 8, 2],
     fillingMaterial: {
       required: false,
       amount: 0
     },
-    shelf: "F5",
+    shelf: "C9",
     supplierNumber: null,
-    status: "packing station",
+    status: "reordered",
+    barcode: {
+      value: uuidv4(),
+      format: "CODE128",
+      lastScanned: new Date()
+    }
+  },
+  {
+    name: "Portable charger",
+    category: "Electronic",
+    price: {
+      purchasePrice: 15.0,
+      sellingPrice: 30.0,
+      nonBindingSalesPrice: 25.0,
+    },
+    expressDispatch: true,
+    availableColours: ["white", "black"],
+    fragile: false,
+    packagingSize: [15, 8, 2],
+    fillingMaterial: {
+      required: false,
+      amount: 0
+    },
+    shelf: "C9",
+    supplierNumber: null,
+    status: "reordered",
+    barcode: {
+      value: uuidv4(),
+      format: "CODE128",
+      lastScanned: new Date()
+    }
+  },
+  {
+    name: "Resistance Bands",
+    category: "Sports",
+    price: {
+      purchasePrice: 8.0,
+      sellingPrice: 20.0,
+      nonBindingSalesPrice: 18.0,
+    },
+    expressDispatch: true,
+    availableColours: ["multicolor"],
+    fragile: false,
+    packagingSize: [15, 10, 5],
+    fillingMaterial: {
+      required: false,
+      amount: 0
+    },
+    shelf: "F6",
+    supplierNumber: null,
+    status: "reordered",
     barcode: {
       value: uuidv4(),
       format: "CODE128",

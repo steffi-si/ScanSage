@@ -127,19 +127,19 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: [
-            "in stock",
-            "almost sold out",
-            "sold out", 
+            "in_stock",
+            "almost_sold_out",
+            "sold_out", 
             "reordered",
-            "can not be reordered", 
-            "stock transfer", 
-            "packing station",
-            "in delivery",
+            "can_not_be_reordered", 
+            "stock_transfer", 
+            "packing_station",
+            "in_delivery",
             "delivered",
-            "delay by supplier",
-            "delay in delivery"
+            "delay_by_supplier",
+            "delay_in_delivery"
         ],
-        default: "in stock"
+        default: "in_stock"
     },
     barcode: barcodeSchema
 }, { timestamps: true });
