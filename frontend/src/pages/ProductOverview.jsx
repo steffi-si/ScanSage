@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../views/Footer.jsx";
 import Barcode from "react-barcode";
 import { BarcodeScanner } from "react-barcode-scanner";
 import 'react-barcode-scanner/polyfill';
@@ -29,9 +28,10 @@ function ProductOverview() {
       }
       if (statusFilter) {
         params.append("status", statusFilter);
+        
       }
       if (params.toString()) {
-        url += "?" + params.toString();
+        url += "?" +  params.toString();
       }
       const response = await fetch(url);
       if (!response.ok) {
@@ -135,16 +135,15 @@ function ProductOverview() {
         )}
       </div>
       <button onClick={() => navigate("/features")}>Back to Features</button>
-      <Footer />
     </div>
   );
 }
 
-function ProductCard({ product, onEditBarcode }) {
+export  function ProductCard({ product, onEditBarcode }) {
+ 
   return (
     <div className="product-card">
       <h3>{product.name || "No name"}</h3>
-      <p>Product Number: {product.productNumber || "No number"}</p>
       <p>Status: {product.status || "No status"}</p>
       <p>Price: {product.price.sellingPrice ? `$${product.price.sellingPrice}` : "Price not available"}</p>
       {product.barcode && (
@@ -155,7 +154,7 @@ function ProductCard({ product, onEditBarcode }) {
             width={1}
             height={100}
             displayValue={true}
-            font="monospace"
+            font="bold 8px Arial"
             textAlign="center"
             textPosition="bottom"
             textMargin={2}
@@ -166,8 +165,8 @@ function ProductCard({ product, onEditBarcode }) {
           />
         </div>
       )}
-      <Link to={`/productdetail/${product.productNumber}`}>Product Details</Link>
-      <button onClick={() => onEditBarcode(product.productNumber)}>Edit Barcode</button>
+      <Link to={`/product-detail/${product.productNumber}`}>Product Details</Link>
+      {/* <button onClick={() => onEditBarcode(product.productNumber)}>Edit Barcode</button> */}
     </div>
   );
 }
@@ -177,15 +176,20 @@ function FilterComponent({ onFilterChange, onStatusChange }) {
     <div className="filter-component">
       <select onChange={(e) => onFilterChange(e.target.value)}>
         <option value="allproducts">All Products</option>
-        <option value="category1">Category 1</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Accessories">Accessories</option>
+        <option value="Electronic">Electronics</option>
+        <option value="Appliances">Appliances</option>
+        <option value="Sports">Sports</option>
+        <option value="Furniture">Furniture</option>
       </select>
       <select onChange={(e) => onStatusChange(e.target.value)}>
         <option value="">All</option>
-        <option value="instock">In Stock</option>
-        <option value="almostsoldout">Almost Sold Out</option>
+        <option value="in_stock">In Stock</option>
+        <option value="almost_sold_out">Almost Sold Out</option>
         <option value="reordered">Reordered</option>
-        <option value="packingstation">Packing Station</option>
-        <option value="indelivery">In Delivery</option>
+        <option value="packing_station">Packing Station</option>
+        <option value="in_delivery">In Delivery</option>
       </select>
     </div>
   );

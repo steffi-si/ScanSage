@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect , useState } from 'react';
 import { useAuth } from '../context/useAuthContext.jsx';
-import Footer from '../views/Footer.jsx';
+
 
 
 function FeaturesPage() {
@@ -30,7 +30,6 @@ function FeaturesPage() {
                
                 <FeatureCard title="Statistics" icon="📈" link="/statistics" />
             </div>
-            <Footer />
         </div>
     ); 
 }

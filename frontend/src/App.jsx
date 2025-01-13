@@ -1,35 +1,21 @@
 import { useState } from "react";
 import { Routes, Route , Navigate} from "react-router-dom";
 import "./App.css";
+import PrivateRoute from "./PrivateRoute.jsx";
 import Header from "./views/Header.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import { AuthProvider, useAuth } from "./context/useAuthContext.jsx";
 import FeaturesPage from "./pages/FeaturesPage.jsx";
 import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
 import Layout from "./Layout.jsx";
 import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
 
 function App() {
   const [popupMessage, setPopupMessage] = useState('');
-
-  {/*PrivateRoute componente*/}
-  const PrivateRoute = ({ children, allowedRoles }) => {
-    const {isLoggedIn, role } = useAuth();
-
-    if(!isLoggedIn) {
-      return <Navigate to="/" />;
-    }
-
-    if(allowedRoles && !allowedRoles.includes(role)) {
-      setPopupMessage("You are not authorized to access this page");
-      Navigate('/features');
-      return null;
-    }
-
-    return children;
-  }
+  // const { isLoggedIn, role } = useAuth();
 
   return (
     <>
@@ -61,6 +47,14 @@ function App() {
             } 
           />
           <Route 
+            path="/product-detail/:productNumber" 
+            element={
+              <PrivateRoute allowedRoles={[ 'manager', 'admin']}>
+                <ProductDetails />
+              </PrivateRoute>
+            }
+          />
+          <Route 
             path="/user-management" 
             element={
               <PrivateRoute allowedRoles={['admin', 'manager']}>
@@ -74,8 +68,9 @@ function App() {
         {/* Fallback Route*/}
           <Route path="*" element={<Navigate to="/"  replace/>} />
         </Routes>
+        <Footer />
       </AuthProvider>
-      <Footer />
+    
     </>
   );
 }

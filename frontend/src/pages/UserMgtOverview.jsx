@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuthContext.jsx";
 
 function UserMgtOverview() {
-  const { user, getToken } = useAuth();
+  const { getToken } = useAuth();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [filterRole, setFilterRole] = useState("");
@@ -13,60 +13,56 @@ function UserMgtOverview() {
   const navigate = useNavigate();
 
   useEffect(() => {
-      console.log("fetchUsers");
-    const fetchUsers = async () => {
-      try {
-        const token = getToken();
-        const response = await fetch(
-          "http://localhost:3000/api/users",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Something went wrong!");
-        }
-        const data = await response.json();
-        setUsers(data.users);
-        setFilteredUsers(data.users);
-        setTotalPages(Math.ceil(data.totalCount / data.limit));
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchUsers();
-  }, [getToken]);
+  }, []);
 
-  const handleRoleFilterChange = (e) => {
-    setFilterRole(e.target.value);
-    setCurrentPage(1);
+  useEffect(() => {
+    applyFilters();
+  }, [users, filterRole, filterDepartment]);
+
+  const fetchUsers = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch("http://localhost:3000/api/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const data = await response.json();
+      setUsers(data.users);
+      setTotalPages(Math.ceil(data.totalCount / data.limit));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDepartmentFilterChange = (e) => {
-    setFilterDepartment(e.target.value);
+  const applyFilters = () => {
+    let result = users;
+    if (filterRole) {
+      result = result.filter(user => user.authorisationRole === filterRole);
+    }
+    if (filterDepartment) {
+      result = result.filter(user => user.department === filterDepartment);
+    }
+    setFilteredUsers(result);
+  };
+
+  const handleFilterChange = (filterType, value) => {
+    if (filterType === 'role') {
+      setFilterRole(value);
+    } else if (filterType === 'department') {
+      setFilterDepartment(value);
+    }
     setCurrentPage(1);
   };
 
   return (
     <div className="user-mgt-overview">
       <h2>User Management Overview</h2>
-      <div className="filter-container">
-        <select value={filterRole} onChange={handleRoleFilterChange}>
-          <option value="">All Roles</option>
-          <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
-          <option value="user">User</option>
-        </select>
-        <select
-          value={filterDepartment}
-          onChange={handleDepartmentFilterChange}
-        >
-          <option value="">All Departments</option>
-          {/* Add department options based on your data */}
-        </select>
-      </div>
+      <FilterComponent onFilterChange={handleFilterChange} filterRole={filterRole} filterDepartment={filterDepartment} />
       <div className="user-card-container">
         {filteredUsers.map((user) => (
           <UserCard key={user.personnelNumber} user={user} />
@@ -118,6 +114,27 @@ function UserCard({ user }) {
       )}
       <p>Employed Since: {new Date(user.employedSince).toDateString()}</p>
       <p>Department: {user.department}</p>
+    </div>
+  );
+}
+
+function FilterComponent({ onFilterChange , filterRole, filterDepartment}) {
+  return (
+    <div className="filter-component">
+      <select value={filterRole} onChange={(e) => onFilterChange(e.target.value)}>
+        <option value="">All Roles</option>
+        <option value="admin">Admin</option>
+        <option value="manager">Manager</option>
+        <option value="user">User</option>
+      </select>
+      <select value={filterDepartment} onChange={(e) => onFilterChange(e.target.value)}>
+        <option value="">All Departments</option>
+        <option value="warehouse">Warehouse</option>
+        <option value="logistics">Logistics</option>
+        <option value="accounting">Accounting</option>
+        <option value="account management">Account Management</option>
+        <option value="it">IT</option>
+      </select>
     </div>
   );
 }
