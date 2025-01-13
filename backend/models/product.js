@@ -1,25 +1,46 @@
 import mongoose from "mongoose";
 import { v4 } from "uuid";
 
-// SubSchema Price
+// SubSchema price
 const priceSchema = new mongoose.Schema({
     nonBindingSalesPrice: {
-        type: Number,
-        min: [0, "The amount must not be negative."]
+        value: {
+            type: Number,
+            min: [0, "The amount must not be negative."]
+        },
+        currency: {
+            type: String,
+            enum: ["USD", "EUR", "JPY", "GBP", "AUD"],
+            default: "USD"
+        }
     },
     purchasePrice: {
-        type: Number,
-        min: [0, "The amount must not be negative."],
-        required: true
+        value: {
+            type: Number,
+            min: [0, "The amount must not be negative."],
+            required: true
+        },
+        currency: {
+            type: String,
+            enum: ["USD", "EUR", "JPY", "GBP", "AUD"],
+            default: "USD"
+        }
     },
     sellingPrice: {
-        type: Number,
-        min: [0, "The amount must not be negative."],
-        required: true
+        value: {
+            type: Number,
+            min: [0, "The amount must not be negative."],
+            required: true
+        },
+        currency: {
+            type: String,
+            enum: ["USD", "EUR", "JPY", "GBP", "AUD"],
+            default: "USD"
+        }
     }
 });
 
-// SubSchema Barcode
+// SubSchema barcode
 const barcodeSchema = new mongoose.Schema({
     value: {
         type: String,
@@ -36,6 +57,74 @@ const barcodeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
+});
+
+// SubSchema description
+const descriptionSchema = new mongoose.Schema({
+    manufacturer: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    model: {
+        type: String,
+        trim: true
+    },
+    description: {
+        type: String,
+        maxlength: [2000, "Description must not exceed 2000 characters."],
+        trim: true
+    },
+    features: [{
+        type: String,
+        trim: true
+    }],
+    materials: [{
+        type: String,
+        trim: true
+    }],
+    weight: {
+        value: Number,
+        unit: {
+            type: String,
+            enum: ["kg", "g", "lb", "lbs", "oz"],
+            default: "kg"
+        }
+    },
+    dimensions: {
+        length: {
+            type: Number,
+            trim: true
+        },
+        width: {
+            type: Number,
+            trim: true
+        },
+        height: {
+            type: Number,
+            trim: true
+        },
+        unit: {
+            type: String,
+            enum: ["cm", "m", "in", "ft"],
+            default: "m"
+        }
+    },
+    warranty: {
+        duration: {
+            type: Number,
+            trim: true
+        },
+        unit: {
+            type: String,
+            enum: ["months", "years"],
+            default: "years"
+        }
+    },
+    customAttributes: [{
+        key: String,
+        value: mongoose.Schema.Types.Mixed
+    }]
 });
 
 // ProductSchema
@@ -141,7 +230,8 @@ const productSchema = new mongoose.Schema({
         ],
         default: "in_stock"
     },
-    barcode: barcodeSchema
+    barcode: barcodeSchema,
+    description: descriptionSchema
 }, { timestamps: true });
 
 const Product = mongoose.model("Product", productSchema);
