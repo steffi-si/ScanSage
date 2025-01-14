@@ -3,6 +3,15 @@ import Product from "../models/product.js";
 
 const router = express.Router();
 
+// Middleware -> Check if user is supervisor
+const isSupervisor = (req, res, next) => {
+    if (req.user && req.user.role === "supervisor") {
+        next();
+    } else {
+        res.status(403).send({ message: "You are not authorized to perform this action." });
+    }
+};
+
 // API product overview
 router.get("/", async (req, res) => {
     try {
@@ -52,7 +61,7 @@ router.get("/:productNumber", async (req, res) => {
 });
 
 // API edit product
-router.put("/:productNumber", async (req, res) => {
+router.put("/:productNumber", isSupervisor, async (req, res) => {
     try {
         const updatedProduct = await Product.findOneAndUpdate(
             { productNumber: req.params.productNumber },
@@ -71,7 +80,7 @@ router.put("/:productNumber", async (req, res) => {
 });
 
 // API delete product
-router.delete("/:productNumber", async (req, res) => {
+router.delete("/:productNumber", isSupervisor, async (req, res) => {
     try {
         const deletedProduct = await Product.findOneAndDelete({ productNumber: req.params.productNumber });
 
@@ -85,56 +94,31 @@ router.delete("/:productNumber", async (req, res) => {
     }
 });
 
-// // API new product
-// router.post("/", async (req, res) => {
+// // API edit barcode
+// router.patch("/:productNumber/barcode", async (req, res) => {
 //     try {
-//         const newProduct = new Product(req.body);
+//         const { value, format } = req.body;
+//         const updatedProduct = await Product.findOneAndUpdate(
+//             { productNumber: req.params.productNumber },
+//             {
+//                 $set: {
+//                     "barcode.value": value,
+//                     "barcode.format": format,
+//                     "barcode.lastScanned": new Date()
+//                 }
+//             },
+//             { new: true }
+//         );
 
-//         // Validate new product
-//         const validationError = newProduct.validateSync();
-//         if (validationError) {
-//             return res.status(400).json({ message: "Validation error", errors: validationError.errors });
+//         if (!updatedProduct) {
+//             return res.status(404).json({ message: "Product not found" });
 //         }
 
-//         // Save new product
-//         const savedProduct = await newProduct.save();
-
-//         res.status(201).json({ message: "Product created successfully", product: savedProduct });
+//         res.json({ updatedProduct });
 //     } catch (err) {
-//         if (err.code === 11000) {
-//             // Duplicate key error (likely for productNumber)
-//             return res.status(400).json({ message: "Product with this number already exists" });
-//         }
-
-//         res.status(500).json({ message: "Server error", error: err.message });
+//         res.status(500).json({ message: "Server error" });
 //     }
 // });
-
-// API edit barcode
-router.patch("/:productNumber/barcode", async (req, res) => {
-    try {
-        const { value, format } = req.body;
-        const updatedProduct = await Product.findOneAndUpdate(
-            { productNumber: req.params.productNumber },
-            {
-                $set: {
-                    "barcode.value": value,
-                    "barcode.format": format,
-                    "barcode.lastScanned": new Date()
-                }
-            },
-            { new: true }
-        );
-
-        if (!updatedProduct) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-
-        res.json({ updatedProduct });
-    } catch (err) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
 
 // API simulate scan
 router.post("/:productNumber/scan", async (req, res) => {
@@ -156,9 +140,15 @@ router.post("/:productNumber/scan", async (req, res) => {
 });
 
 // API new product with barcode
-router.post("/with-barcode", async (req, res) => {
+router.post("/", isSupervisor, async (req, res) => {
     try {
         const { barcode, ...productData } = req.body;
+
+        // check: barcode available?
+        if (!barcode || !barcode.value) {
+            return res.status(400).json({ message: "Barcode data ist required" });
+        }
+
         const newProduct = new Product({
             ...productData,
             barcode: {
@@ -177,7 +167,7 @@ router.post("/with-barcode", async (req, res) => {
         // Save new product
         const savedProduct = await newProduct.save();
 
-        res.status(201).json({ message: "Product created successfully with barcode", product: savedProduct });
+        res.status(201).json({ message: "Product created successfully", product: savedProduct });
     } catch (err) {
         // Error with duplicate key (probably for productNumber or barcode value)
         if (err.code === 11000) {
