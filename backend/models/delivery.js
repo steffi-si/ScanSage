@@ -22,8 +22,7 @@ const deliverySchema = new mongoose.Schema({
     },
     assignedUser: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        default: []
+        ref: "User"
     },
     products: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -51,6 +50,31 @@ const deliverySchema = new mongoose.Schema({
         type: Number,
         default: 0,
         min: [0, "Items delivered must not be negative."]
+    },
+    totalPrice: {
+        type: Number,
+        required: true,
+        min: [0, "Total price must not be negative."]
+    },
+    totalWeight: {
+        type: Number,
+        min: [0, "Totel weight must not be negative."]
+    },
+    expectedDeliveryTime: { type: Date },
+    trackingNumber: { 
+        type: String,
+        trim: true,
+        unique: true
+    },
+    deliveryInstructions: {
+        type: String,
+        trim: true
+    },
+    paymentStatus: {
+        type: String,
+        trim: true,
+        enum: ["pending", "paid", "failed"],
+        default: "pending"
     },
     // Optional delivery details
     deliveryPostcode: {

@@ -35,7 +35,7 @@ async function createMockWarehouses() {
 
         const user = await User.findOne({ userName: "user" });
         const manager = await User.findOne({ userName: "manager" });
-        const product = await Product.findOne(); // Annahme: Sie haben mindestens ein Produkt
+        const product = await Product.findOne();
 
         for (const warehouseData of mockWarehouses) {
             const delivery = new Delivery({
