@@ -11,6 +11,8 @@ function ProductDetails() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const isSupervisor = userRole === 'supervisor';
+  
   useEffect(() => {
     const fetchProduct = async () => {
       try {
