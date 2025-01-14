@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
     authorisationRole: {
         type: String,
         required: true,
-        enum: ["user", "manager", "admin"],
+        enum: ["user", "manager", "admin", "supervisor"],
         default: "user"
     },
     personnelNumber: {

@@ -264,7 +264,7 @@ const mockUsers = [
     department: "Account Management",
   },
   {
-    authorisationRole: "user",
+    authorisationRole: "supervisor",
     firstName: "Thomas",
     lastName: "Becker",
     addressDetails: {
@@ -278,7 +278,7 @@ const mockUsers = [
       onCall: false,
       onCallPhoneNumber: "",
     },
-    userName: "user7",
+    userName: "supervisor3",
     password: "testtest",
     employedSince: new Date("2023-02-15"),
     birthday: new Date("1992-09-10"),
@@ -287,7 +287,7 @@ const mockUsers = [
 
   // Additional users for Accounting department
   {
-    authorisationRole: "user",
+    authorisationRole: "supervisor",
     firstName: "Maria",
     lastName: "Schneider",
     addressDetails: {
@@ -301,14 +301,14 @@ const mockUsers = [
       onCall: false,
       onCallPhoneNumber: "",
     },
-    userName: "user8",
+    userName: "supervisor2",
     password: "testtest",
     employedSince: new Date("2022-07-01"),
     birthday: new Date("1990-05-15"),
     department: "Accounting",
   },
   {
-    authorisationRole: "user",
+    authorisationRole: "supervisor",
     firstName: "Peter",
     lastName: "Koch",
     addressDetails: {
@@ -322,7 +322,7 @@ const mockUsers = [
       onCall: false,
       onCallPhoneNumber: "",
     },
-    userName: "user9",
+    userName: "supervisor1",
     password: "testtest",
     employedSince: new Date("2023-01-15"),
     birthday: new Date("1988-12-20"),
@@ -331,7 +331,7 @@ const mockUsers = [
 
   // Additional users for IT department
   {
-    authorisationRole: "user",
+    authorisationRole: "supervisor",
     firstName: "Laura",
     lastName: "Meyer",
     addressDetails: {
@@ -345,7 +345,7 @@ const mockUsers = [
       onCall: false,
       onCallPhoneNumber: "",
     },
-    userName: "user10",
+    userName: "supervisor",
     password: "testtest",
     employedSince: new Date("2022-11-01"),
     birthday: new Date("1995-08-30"),
