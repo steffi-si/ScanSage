@@ -33,7 +33,7 @@ function App() {
           <Route 
             path="/features" 
             element={
-              <PrivateRoute allowedRoles={['user', 'manager', 'admin']}>
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
                 <FeaturesPage />
               </PrivateRoute>
             }
@@ -41,7 +41,7 @@ function App() {
           <Route 
             path="/product-overview" 
             element={
-              <PrivateRoute allowedRoles={['user', 'manager', 'admin']}>
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
                 <ProductOverview />
               </PrivateRoute>
             } 
@@ -49,7 +49,7 @@ function App() {
           <Route 
             path="/product-detail/:productNumber" 
             element={
-              <PrivateRoute allowedRoles={['user', 'manager', 'admin']}>
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
                 <ProductDetails />
               </PrivateRoute>
             }

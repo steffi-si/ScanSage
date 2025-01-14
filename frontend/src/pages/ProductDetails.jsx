@@ -218,15 +218,6 @@ function ProductDetails() {
           >
             Delete Product
           </button>
-          {/* <button
-            onClick={() =>
-              navigate(
-                `/productdetail/${productData.productNumber}/editbarcode`
-              )
-            }
-          >
-            Edit Barcode
-          </button> */}
           <button onClick={() => navigate("/scan-barcode")}>
             Scan New Product
           </button>
