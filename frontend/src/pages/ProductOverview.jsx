@@ -145,7 +145,11 @@ export  function ProductCard({ product, onEditBarcode }) {
     <div className="product-card">
       <h3>{product.name || "No name"}</h3>
       <p>Status: {product.status || "No status"}</p>
-      <p>Price: {product.price.sellingPrice ? `$${product.price.sellingPrice}` : "Price not available"}</p>
+      <p>Price: {
+        product.price?.sellingPrice?.value 
+          ? `${product.price.sellingPrice.value.toFixed(2)} ${product.price.sellingPrice.currency}`
+          : "Price not available"
+      }</p>
       {product.barcode && (
         <div className="barcode-container">
           <Barcode

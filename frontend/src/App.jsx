@@ -49,7 +49,7 @@ function App() {
           <Route 
             path="/product-detail/:productNumber" 
             element={
-              <PrivateRoute allowedRoles={[ 'manager', 'admin']}>
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin']}>
                 <ProductDetails />
               </PrivateRoute>
             }

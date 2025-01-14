@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function Header() {
     //
     const { isLoggedIn , logout } = useAuth();
-    const navigate = useNavigate();  //useNavigate is a hook that returns a navigate function
+    const navigate = useNavigate();  
 
     function handleLogout() {
         logout();
@@ -22,8 +22,9 @@ function Header() {
             <nav>
                 {isLoggedIn ? (
                     <>
-                        <button onClick={handleLogout}>Logout</button>
-                        <a href="/">Back to Home</a>
+                       <button onClick={() => navigate("/features")}>Back to Features</button>
+                       <button onClick={handleLogout}>Logout</button>
+                    
                     </>
                 ) : (
                     <>

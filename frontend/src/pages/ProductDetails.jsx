@@ -92,93 +92,147 @@ function ProductDetails() {
   };
 
   return (
-    <div>
+    <div className="main-content">
       <div className="product-details-container">
         <ProductCard product={productData} onEditBarcode={() => {}} />
       </div>
 
-      <div className="card product-details">
+      <div className="product-details-container card">
         <h2>Product Details</h2>
         <ul>
-          <li>Product Number: {productData.productNumber}</li>
-          <li>Name: {productData.name}</li>
-          <li>Category: {productData.category}</li>
-          <li>Status: {productData.status}</li>
-          <li>Shelf : {productData.shelf}</li>
           <li>
-            Prices:
+            <strong>Name:</strong> {productData.name}
+          </li>
+          <li>
+            <strong>Category:</strong> {productData.category}
+          </li>
+          <li>
+            <strong>Prices:</strong>
             <ul className="nested-list">
               <li>
-                Purchase Price: ${productData.price.purchasePrice ?? 'N/A'}
+                Purchase Price:{" "}
+                {productData.price?.purchasePrice?.value?.toFixed(2) ?? "N/A"}{" "}
+                {productData.price?.purchasePrice?.currency}
               </li>
               <li>
-                Selling Price: ${productData.price.sellingPrice  ?? 'N/A'}
+                Selling Price:{" "}
+                {productData.price?.sellingPrice?.value?.toFixed(2) ?? "N/A"}{" "}
+                {productData.price?.sellingPrice?.currency}
               </li>
               <li>
-                Non-Binding Sales: $
-                {productData.price.nonBindingSalesPrice ?? 'N/A'}
+                Non-Binding Sales Price:{" "}
+                {productData.price?.nonBindingSalesPrice?.value?.toFixed(2) ??
+                  "N/A"}{" "}
+                {productData.price?.nonBindingSalesPrice?.currency}
               </li>
             </ul>
           </li>
           <li>
-            Express Dispatch: {productData.expressDispatch ? "Yes" : "No"}
+            <strong>Express Dispatch:</strong>{" "}
+            {productData.expressDispatch ? "Yes" : "No"}
           </li>
-          <li>Available Colours: {productData.availableColours.join(" / ")}</li>
-          <li>Fragile: {productData.fragile ? "Yes" : "No"}</li>
           <li>
-            Filling Material:{" "}
-            {productData.fillingMaterial.required ? "Required" : "Not Required"}
-            , Amount: {productData.fillingMaterial.amount}
+            <strong>Available Colours:</strong>{" "}
+            {productData.availableColours?.join(", ") ?? "N/A"}
           </li>
-          <li>Supplier Number: {productData.supplierNumber || "N/A"}</li>
           <li>
-            Barcode:
+            <strong>Fragile:</strong> {productData.fragile ? "Yes" : "No"}
+          </li>
+          <li>
+            <strong>Packaging Size:</strong>{" "}
+            {productData.packagingSize?.join(" x ") ?? "N/A"} cm
+          </li>
+          <li>
+            <strong>Filling Material:</strong>{" "}
+            {productData.fillingMaterial?.required
+              ? "Required"
+              : "Not Required"}
+            , Amount: {productData.fillingMaterial?.amount}
+          </li>
+          <li>
+            <strong>Shelf:</strong> {productData.shelf}
+          </li>
+          <li>
+            <strong>Supplier Number:</strong>{" "}
+            {productData.supplierNumber ?? "N/A"}
+          </li>
+          <li>
+            <strong>Status:</strong> {productData.status}
+          </li>
+          <li>
+            <strong>Barcode:</strong>
             <ul className="nested-list">
-              <li>Value: {productData.barcode.value}</li>
-              <li>Format: {productData.barcode.format}</li>
+              <li>Value: {productData.barcode?.value ?? "N/A"}</li>
+              <li>Format: {productData.barcode?.format}</li>
               <li>
                 Last Scanned:{" "}
-                {productData.barcode.lastScanned
+                {productData.barcode?.lastScanned
                   ? new Date(productData.barcode.lastScanned).toLocaleString()
                   : "N/A"}
               </li>
             </ul>
           </li>
           <li>
-            Created At:{" "}
-            {productData.createdAt
-              ? new Date(productData.createdAt).toLocaleString()
-              : "N/A"}
-          </li>
-          <li>
-            Updated At:{" "}
-            {productData.updatedAt
-              ? new Date(productData.updatedAt).toLocaleString()
-              : "N/A"}
+            <strong>Description:</strong>
+            <ul className="nested-list">
+              <li>Manufacturer: {productData.description?.manufacturer}</li>
+              <li>
+                Long Description: {productData.description?.longDescription}
+              </li>
+              <li>
+                Materials:{" "}
+                {productData.description?.materials?.join(", ") ?? "N/A"}
+              </li>
+              <li>
+                Weight: {productData.description?.weight?.value}{" "}
+                {productData.description?.weight?.unit}
+              </li>
+              <li>
+                Custom Attributes:
+                <ul className="nested-list">
+                  {productData.description?.customAttributes?.map(
+                    (attr, index) => (
+                      <li key={index}>
+                        {attr.key}:{" "}
+                        {Array.isArray(attr.value)
+                          ? attr.value.join(", ")
+                          : attr.value}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </li>
+            </ul>
           </li>
         </ul>
+        <div className="admin-controls">
+          <button
+            onClick={() =>
+              navigate(`/editproduct/${productData.productNumber}`)
+            }
+          >
+            Edit Product
+          </button>
+          <button
+            onClick={() => handleDeleteProduct(productData.productNumber)}
+          >
+            Delete Product
+          </button>
+          {/* <button
+            onClick={() =>
+              navigate(
+                `/productdetail/${productData.productNumber}/editbarcode`
+              )
+            }
+          >
+            Edit Barcode
+          </button> */}
+          <button onClick={() => navigate("/scan-barcode")}>
+            Scan New Product
+          </button>
+        </div>
       </div>
 
-      <div className="admin-controls">
-        <button
-          onClick={() => navigate(`/editproduct/${productData.productNumber}`)}
-        >
-          Edit Product
-        </button>
-        <button onClick={() => handleDeleteProduct(productData.productNumber)}>
-          Delete Product
-        </button>
-        <button
-          onClick={() =>
-            navigate(`/productdetail/${productData.productNumber}/editbarcode`)
-          }
-        >
-          Edit Barcode
-        </button>
-        <button onClick={() => navigate("/scan-barcode")}>
-          Scan New Product
-        </button>
-      </div>
     </div>
   );
 }
@@ -190,8 +244,10 @@ function ProductCard({ product, onEditBarcode }) {
       <p>Status: {product.status || "No status"}</p>
       <p>
         Price:{" "}
-        {product.price.sellingPrice
-          ? `$${product.price.sellingPrice}`
+        {product.price?.sellingPrice?.value
+          ? `${product.price.sellingPrice.value.toFixed(2)} ${
+              product.price.sellingPrice.currency
+            }`
           : "Price not available"}
       </p>
       {product.barcode && (
@@ -216,9 +272,9 @@ function ProductCard({ product, onEditBarcode }) {
       <Link to={`/product-detail/${product.productNumber}`}>
         Product Details
       </Link>
-      <button onClick={() => onEditBarcode(product.productNumber)}>
+      {/* <button onClick={() => onEditBarcode(product.productNumber)}>
         Edit Barcode
-      </button>
+      </button> */}
     </div>
   );
 }
