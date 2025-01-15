@@ -15,7 +15,7 @@ import Footer from "./views/Footer.jsx";
 
 function App() {
   const [popupMessage, setPopupMessage] = useState('');
-  // const { isLoggedIn, role } = useAuth();
+  const { isLoggedIn, role } = useAuth();
 
   return (
     <>
