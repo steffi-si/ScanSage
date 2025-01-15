@@ -120,7 +120,7 @@ router.put("/:productNumber", authMiddleware, async (req, res) => {
 // API delete product
 router.delete("/:productNumber", authMiddleware, async (req, res) => {
     try {
-        if (req.user.role !== "supervisor") {
+        if (req.user.authorisationRole !== "supervisor") {
             return res.status(403).json({ message: "Access denied."})
         }
 
@@ -187,7 +187,7 @@ router.post("/:productNumber/scan", async (req, res) => {
 // API new product with barcode
 router.post("/", authMiddleware, async (req, res) => {
     try {
-        if (req.user.role !== "supervisor") {
+        if (req.user.authorisationRole !== "supervisor") {
             return res.status(403).json({ message: "Access denied."})
         }
 
