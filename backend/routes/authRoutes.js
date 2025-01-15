@@ -8,8 +8,8 @@ const router = express.Router();
 // API Login
 router.post("/login", async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ userName: username });
+        const { userName, password } = req.body;
+        const user = await User.findOne({ userName: userName });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -27,7 +27,7 @@ router.post("/login", async (req, res) => {
             role: user.authorisationRole
         }});
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error", error: err.message });
     }
 });
 

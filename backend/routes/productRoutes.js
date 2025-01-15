@@ -1,6 +1,7 @@
 import express from "express";
 import Product from "../models/product.js";
 import User from "../models/user.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ const authMiddleware = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // find user in database
-        const user = await User.findById(decoded.id);
+        const user = await User.findById(decoded.userId);
 
         if (!user) {
             return res.status(401).json({ message: "Access denied. User not found." });
@@ -38,7 +39,7 @@ const authMiddleware = async (req, res, next) => {
         if (err.name === "TokenExpiredError") {
             return res.status(401).json({ message: "Access denied. Token expired." });
         }
-        return res.status(500).json({ message: "Server error." });
+        return res.status(500).json({ message: err.message });
     }
 };
 
@@ -93,7 +94,7 @@ router.get("/:productNumber", async (req, res) => {
 // API edit product
 router.put("/:productNumber", authMiddleware, async (req, res) => {
     try {
-        if (req.user.role !== "supervisor") {
+        if (req.user.authorisationRole !== "supervisor") {
             return res.status(403).json({ message: "Access denied."})
         }
 
@@ -112,7 +113,7 @@ router.put("/:productNumber", authMiddleware, async (req, res) => {
             user: res.locals.user 
         });
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: err.message });
     }
 });
 

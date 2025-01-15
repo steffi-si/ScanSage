@@ -10,7 +10,15 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 const shelfSchema = new mongoose.Schema({
     shelfNumber: {
         type: Number,
-        unique: true
+        unique: true,
+        index: true,
+        required: true
+    },
+    shelfCode: {
+        type: String,
+        unique: true,
+        index: true,
+        required: true
     },
     capacity: {
         type: Number,
@@ -43,7 +51,8 @@ const warehouseSchema = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true,
-        maxlength: [50, "Warehouse name must not exceed 50 characters."]
+        maxlength: [50, "Warehouse name must not exceed 50 characters."],
+        index: true
     },
     address: {
         type: String,
@@ -72,7 +81,7 @@ const warehouseSchema = new mongoose.Schema({
 }, {timestamps: true });
 
 // Plugin for shelfNumber
-shelfSchema.plugin(AutoIncrement, {inc_field: "shelfNumber", start_seq: 1000});
+shelfSchema.plugin(AutoIncrement, {inc_field: "shelfNumber", start_seq: 10000});
 
 const Warehouse = mongoose.model("Warehouse", warehouseSchema);
 
