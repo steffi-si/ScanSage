@@ -202,9 +202,13 @@ const productSchema = new mongoose.Schema({
         }
     },
     shelf: {
-		type: String,
-        required: true
+		type: mongoose.Schema.Types.ObjectId,
+        ref: "Warehouse.shelves"
 	},
+    warehouse: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Warehouse"
+    },
     deliveryVan: {
 		type: String
 	},
