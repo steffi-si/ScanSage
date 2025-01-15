@@ -67,6 +67,7 @@ function UserDetails() {
                     <option value="user">User</option>
                     <option value="manager">Manager</option>
                     <option value="admin">Admin</option>
+                    <option value="supervisor">Supervisor</option>
                 </select>
                 <button type="submit">Update</button>
             </form>   
