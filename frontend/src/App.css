@@ -373,14 +373,14 @@ button:hover {
   margin-left: 30px;
 }
 
-.admin-controls {
+.supervisor-controls {
   display: flex;
   justify-content: center;
   gap: 10px;
   width: 100%;
 }
 
-.admin-controls button {
+.supervisor-controls button {
   margin-top: 25px;
   padding: 10px 15px;
   background-color: #797b7c;
@@ -391,7 +391,7 @@ button:hover {
   transition: background-color 0.3s;
 }
 
-.admin-controls button:hover {
+.supervisor-controls button:hover {
   background-color: #00b38c;
 }
 

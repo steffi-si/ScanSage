@@ -1,18 +1,20 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/useAuthContext";
 import Barcode from "react-barcode";
 // import { ProductCard } from "./ProductOverview";
 
 function ProductDetails() {
   const navigate = useNavigate();
+  const { role } = useAuth();
   const { productNumber } = useParams();
   const [productData, setProductData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const isSupervisor = userRole === 'supervisor';
-  
+  const isSupervisor = role === "supervisor";
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -69,7 +71,11 @@ function ProductDetails() {
     navigate(`/productdetail/${productNumber}/editbarcode`);
   };
 
-  const handleEdit = async (productNumber) => {
+  const handleEditProduct = async (productNumber) => {
+    if (!isSupervisor) {
+      alert("You are not allowed to reorder products");
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3000/api/products/${productNumber}`,
@@ -90,6 +96,36 @@ function ProductDetails() {
       setProductData(data.updatedProduct);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleDeleteProduct = async (productNumber) => {
+    if (!isSupervisor) {
+      alert("You are not allowed to delete products");
+      return;
+    }
+    if (!window.confirm("Are you sure you want to delete this product?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/products/${productNumber}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to delete product");
+      }
+      alert("Product deleted successfully");
+      navigate("/product-overview");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Failed to delete product");
     }
   };
 
@@ -179,7 +215,7 @@ function ProductDetails() {
             <ul className="nested-list">
               <li>Manufacturer: {productData.description?.manufacturer}</li>
               <li>
-                Long Description: {productData.description?.longDescription}
+                Long Description: {productData.description?.longDescription?.join(", ") ?? "N/A"}
               </li>
               <li>
                 Materials:{" "}
@@ -189,43 +225,27 @@ function ProductDetails() {
                 Weight: {productData.description?.weight?.value}{" "}
                 {productData.description?.weight?.unit}
               </li>
-              <li>
-                Custom Attributes:
-                <ul className="nested-list">
-                  {productData.description?.customAttributes?.map(
-                    (attr, index) => (
-                      <li key={index}>
-                        {attr.key}:{" "}
-                        {Array.isArray(attr.value)
-                          ? attr.value.join(", ")
-                          : attr.value}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </li>
             </ul>
           </li>
         </ul>
-        <div className="admin-controls">
-          <button
-            onClick={() =>
-              navigate(`/editproduct/${productData.productNumber}`)
-            }
-          >
-            Edit Product
-          </button>
-          <button
-            onClick={() => handleDeleteProduct(productData.productNumber)}
-          >
-            Delete Product
-          </button>
-          <button onClick={() => navigate("/scan-barcode")}>
-            Scan New Product
-          </button>
-        </div>
+        {isSupervisor && (
+          <div className="supervisor-controls">
+            <button
+              onClick={() => handleEditProduct(productData.productNumber)}
+            >
+              Edit Product
+            </button>
+            <button
+              onClick={() => handleDeleteProduct(productData.productNumber)}
+            >
+              Delete Product
+            </button>
+          </div>
+        )}
+        <button onClick={() => navigate("/scan-barcode")}>
+          Scan New Product
+        </button>
       </div>
-
     </div>
   );
 }
