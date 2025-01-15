@@ -77,15 +77,24 @@ function ProductDetails() {
       return;
     }
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3000/api/products/${productNumber}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            status: "reordered",
+            status: "reordered", 
+            availableStatuses: [
+              "in_stock",
+              "almost_sold_out",
+              "reordered",
+              "packing_station",
+              "in_delivery"
+            ]
           }),
         }
       );
@@ -109,12 +118,14 @@ function ProductDetails() {
     }
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3000/api/products/${productNumber}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
