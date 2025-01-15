@@ -48,19 +48,20 @@ router.get("/:deliveryNumber", async (req, res) => {
     }
 });
 
-// API new delivery
-router.post("/", async (req, res) => {
-    try {
-
-    } catch (err) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-
 // API edit delivery
 router.put("/:deliveryNumber", async (req, res) => {
     try {
+        const updatedDelivery = await Delivery.findByIdAndUpdate(
+            { deliveryNumber: req.params.deliveryNumber },
+            req.body,
+            { new: true }
+        ).populate("assignedUser products");
 
+        if (!updatedDelivery) {
+            return res.status(404).json({ message: "Delivery not found." });
+        }
+
+        res.json({ updatedDelivery });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
@@ -69,7 +70,55 @@ router.put("/:deliveryNumber", async (req, res) => {
 // API delete delivery
 router.delete("/:deliveryNumber", async (req, res) => {
     try {
+        const deletedDelivery = await Delivery.findOneAndDelete({ deliveryNumber: req.params.deliveryNumber });
 
+        if (!deletedDelivery) {
+            return res.status(404).json({ message: "Delivery not found." });
+        }
+
+        res.json({ message: "Delivery deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// API new delivery
+router.post("/", async (req, res) => {
+    try {
+        const newDelivery = new Delivery(req.body);
+
+        const validationError = newDelivery.validateSync();
+        if (validationError) {
+            return res.status(400).json({ message: "Validation error", errors: validationError.errors });
+        }
+
+        const savedDelivery = await newDelivery.save();
+
+        res.status(201).json({ message: "Delivery created successfully", delivery: savedDelivery });
+    } catch (err) {
+        if (err.code === 11000) {
+            return res.status(400).json({ message: "Delivery with this number already exists" })
+        }
+
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
+// API update delivery status
+router.patch("/:deliveryNumber/status", async (req, res) => {
+    try {
+        const { status } = req.body;
+        const updatedDelivery = await Delivery.findOneAndUpdate(
+            { deliveryNumber: req.params.deliveryNumber },
+            { $set: { status } },
+            { new: true }
+        ).populate("assignedUser products");
+
+        if (!updatedDelivery) {
+            return res.status(404).json({ message: "Delivery not found." });
+        }
+
+        res.json({ updatedDelivery });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
