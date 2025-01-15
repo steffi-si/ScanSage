@@ -1,14 +1,44 @@
 import express from "express";
 import Product from "../models/product.js";
+import User from "../models/user.js";
 
 const router = express.Router();
 
-// Middleware -> Check if user is supervisor
-const isSupervisor = (req, res, next) => {
-    if (req.user && req.user.role === "supervisor") {
+// Middleware 
+const authMiddleware = async (req, res, next) => {
+    try {
+        // extract token from authorization header
+        const token = req.header('Authorization').replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({ message: "Access denied. No token provided." });
+        }
+
+        // verify token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // find user in database
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({ message: "Access denied. User not found." });
+        }
+
+        // add user to req obj
+        req.user = user;
+
+        // send user information in the response (conerted to a plain js obj)
+        res.locals.user = user.toObject()
+
         next();
-    } else {
-        res.status(403).send({ message: "You are not authorized to perform this action." });
+    } catch (err) {
+        if (err.name === "JsonWebTokenError") {
+            return res.status(401).json({ message: "Access denied. Invalid token." });
+        }
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "Access denied. Token expired." });
+        }
+        return res.status(500).json({ message: "Server error." });
     }
 };
 
@@ -61,8 +91,12 @@ router.get("/:productNumber", async (req, res) => {
 });
 
 // API edit product
-router.put("/:productNumber", isSupervisor, async (req, res) => {
+router.put("/:productNumber", authMiddleware, async (req, res) => {
     try {
+        if (req.user.role !== "supervisor") {
+            return res.status(403).json({ message: "Access denied."})
+        }
+
         const updatedProduct = await Product.findOneAndUpdate(
             { productNumber: req.params.productNumber },
             req.body,
@@ -73,22 +107,32 @@ router.put("/:productNumber", isSupervisor, async (req, res) => {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        res.json({ updatedProduct });
+        res.json({ 
+            updatedProduct,
+            user: res.locals.user 
+        });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
 });
 
 // API delete product
-router.delete("/:productNumber", isSupervisor, async (req, res) => {
+router.delete("/:productNumber", authMiddleware, async (req, res) => {
     try {
+        if (req.user.role !== "supervisor") {
+            return res.status(403).json({ message: "Access denied."})
+        }
+
         const deletedProduct = await Product.findOneAndDelete({ productNumber: req.params.productNumber });
 
         if (!deletedProduct) {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        res.json({ message: "Product deleted successfully" });
+        res.json({ 
+            message: "Product deleted successfully",
+            user: res.locals.user
+        });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
@@ -140,8 +184,12 @@ router.post("/:productNumber/scan", async (req, res) => {
 });
 
 // API new product with barcode
-router.post("/", isSupervisor, async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
+        if (req.user.role !== "supervisor") {
+            return res.status(403).json({ message: "Access denied."})
+        }
+
         const { barcode, ...productData } = req.body;
 
         // check: barcode available?
@@ -167,7 +215,11 @@ router.post("/", isSupervisor, async (req, res) => {
         // Save new product
         const savedProduct = await newProduct.save();
 
-        res.status(201).json({ message: "Product created successfully", product: savedProduct });
+        res.status(201).json({ 
+            message: "Product created successfully", 
+            product: savedProduct,
+            user: res.locals.user
+        });
     } catch (err) {
         // Error with duplicate key (probably for productNumber or barcode value)
         if (err.code === 11000) {
