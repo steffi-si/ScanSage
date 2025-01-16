@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
     //state variables
-    const [username, setUsername] = useState('');
+    const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +20,7 @@ function LoginForm() {
         setError('');
         //here we will add the login logic
         //for example API call to login
-        if(!username || !password) {
+        if(!userName || !password) {
             setError('Please enter username and password');
             return;
         }
@@ -34,7 +34,7 @@ function LoginForm() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username,
+                    userName,
                     password
                 })
             });
@@ -76,7 +76,7 @@ function LoginForm() {
                 <input 
                     type="text" 
                     id="username"
-                    value={username} 
+                    value={userName} 
                     onChange={(e) => setUsername(e.target.value)}
                     aria-required="true"
                 />

@@ -12,6 +12,8 @@ function ProductDetails() {
   const [productData, setProductData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedProduct, setEditedProduct] = useState({});
 
   const isSupervisor = role === "supervisor";
 
@@ -29,7 +31,7 @@ function ProductDetails() {
 
         setProductData(data.product);
       } catch (err) {
-        setError("Error fetching product: " + err.message);
+        setError("Error fetching product: " + error.message);
       } finally {
         setLoading(false);
       }
@@ -38,46 +40,50 @@ function ProductDetails() {
     fetchProduct();
   }, [productNumber]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!productData) {
-    return <p>Product not found</p>;
-  }
-
-  const handleScan = async (code) => {
-    setScannedCode(code);
-    setShowScanner(false);
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/products/${code}/scan`,
-        {
-          method: "POST",
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        navigate(`/productdetail/${data.product.productNumber}`);
-      } else {
-        setError("Product not found");
-      }
-    } catch (error) {
-      setError("Error scanning product: " + error.message);
-    }
+  const handleInputChange = (key, value) => {
+    setEditedProduct({
+      ...editedProduct,
+      [key]: value,
+    });
   };
 
   const handleEditBarcode = (productNumber) => {
     navigate(`/productdetail/${productNumber}/editbarcode`);
   };
 
-  const handleEditProduct = async (productNumber) => {
+  const handleEditProduct = async () => {
     if (!isSupervisor) {
       alert("You are not allowed to reorder products");
       return;
     }
+    setIsEditing(true);
+    setEditedProduct({
+      ...productData,
+      fillingMaterial: {
+        ...productData.fillingMaterial,
+        required: productData.fillingMaterial?.required || false,
+        amount: productData.fillingMaterial?.amount || 0,
+      },
+      description: {
+        ...productData.description,
+        weight: {
+          ...productData.description?.weight,
+          value: productData.description?.weight?.value || 0,
+        },
+        manufacturer: productData.description?.manufacturer || "",
+        longDescription: productData.description?.longDescription || [],
+        materials: productData.description?.materials || [],
+      }
+    });
+  };
+
+  const handleSaveChanges = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You need to be logged in to edit products");
+      return;
+    }
     try {
-      const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:3000/api/products/${productNumber}`,
         {
@@ -86,29 +92,27 @@ function ProductDetails() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            status: "reordered", 
-            availableStatuses: [
-              "in_stock",
-              "almost_sold_out",
-              "reordered",
-              "packing_station",
-              "in_delivery"
-            ]
-          }),
+          body: JSON.stringify(editedProduct),
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to update product");
+        if (response.status === 403) {
+          alert("Access denied.");
+        } else {
+          throw new Error("Failed to update product");
+        }
       }
       const data = await response.json();
       setProductData(data.updatedProduct);
+      setIsEditing(false);
+      setEditedProduct(null);
     } catch (error) {
       console.error(error);
+      alert("Failed to update product: " + error.message);
     }
   };
 
-  const handleDeleteProduct = async (productNumber) => {
+  const handleDeleteProduct = async () => {
     if (!isSupervisor) {
       alert("You are not allowed to delete products");
       return;
@@ -140,73 +144,305 @@ function ProductDetails() {
     }
   };
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!productData) {
+    return <p>Product not found</p>;
+  }
+
   return (
     <div className="main-content">
       <div className="product-details-container">
         <ProductCard product={productData} onEditBarcode={() => {}} />
       </div>
 
-      <div className="product-details-container card">
+      <div className={`product-details-container card ${isEditing ? 'editing-mode' : ''}`}>
         <h2>Product Details</h2>
         <ul>
           <li>
-            <strong>Name:</strong> {productData.name}
+            <strong>Name:</strong>
+            {isEditing ? (
+              <input
+                value={productData.name}
+                onChange={(e) => handleInputChange("name", e.target.value)}
+              />
+            ) : (
+              productData.name
+            )}
           </li>
           <li>
-            <strong>Category:</strong> {productData.category}
+            <strong>Category:</strong>
+            {isEditing ? (
+              <input
+                value={productData.category}
+                onChange={(e) => handleInputChange("category", e.target.value)}
+              />
+            ) : (
+              productData.category
+            )}
           </li>
           <li>
             <strong>Prices:</strong>
             <ul className="nested-list">
               <li>
                 Purchase Price:{" "}
-                {productData.price?.purchasePrice?.value?.toFixed(2) ?? "N/A"}{" "}
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={editedProduct?.price?.purchasePrice?.value || ""}
+                    onChange={(e) =>
+                      setEditedProduct({
+                        ...editedProduct,
+                        price: {
+                          ...editedProduct?.price,
+                          purchasePrice: {
+                            ...editedProduct?.price?.purchasePrice,
+                            value: parseFloat(e.target.value),
+                          },
+                        },
+                      })
+                    }
+                  />
+                ) : (
+                  productData.price?.purchasePrice?.value?.toFixed(2) ?? "N/A"
+                )}{" "}
                 {productData.price?.purchasePrice?.currency}
               </li>
               <li>
                 Selling Price:{" "}
-                {productData.price?.sellingPrice?.value?.toFixed(2) ?? "N/A"}{" "}
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={editedProduct.price?.sellingPrice?.value || ""}
+                    onChange={(e) =>
+                      setEditedProduct({
+                        ...editedProduct,
+                        price: {
+                          ...editedProduct.price,
+                          sellingPrice: {
+                            ...editedProduct.price?.sellingPrice,
+                            value: parseFloat(e.target.value),
+                          },
+                        },
+                      })
+                    }
+                  />
+                ) : (
+                  productData.price?.sellingPrice?.value?.toFixed(2) ?? "N/A"
+                )}{" "}
                 {productData.price?.sellingPrice?.currency}
               </li>
               <li>
                 Non-Binding Sales Price:{" "}
-                {productData.price?.nonBindingSalesPrice?.value?.toFixed(2) ??
-                  "N/A"}{" "}
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={
+                      editedProduct.price?.nonBindingSalesPrice?.value || ""
+                    }
+                    onChange={(e) =>
+                      setEditedProduct({
+                        ...editedProduct,
+                        price: {
+                          ...editedProduct.price,
+                          nonBindingSalesPrice: {
+                            ...editedProduct.price?.nonBindingSalesPrice,
+                            value: parseFloat(e.target.value),
+                          },
+                        },
+                      })
+                    }
+                  />
+                ) : (
+                  productData.price?.nonBindingSalesPrice?.value?.toFixed(2) ??
+                  "N/A"
+                )}{" "}
                 {productData.price?.nonBindingSalesPrice?.currency}
               </li>
             </ul>
           </li>
           <li>
             <strong>Express Dispatch:</strong>{" "}
-            {productData.expressDispatch ? "Yes" : "No"}
+            {isEditing ? (
+              <select
+                value={editedProduct.expressDispatch ? "Yes" : "No"}
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    expressDispatch: e.target.value === "Yes",
+                  })
+                }
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            ) : productData.expressDispatch ? (
+              "Yes"
+            ) : (
+              "No"
+            )}
           </li>
           <li>
             <strong>Available Colours:</strong>{" "}
-            {productData.availableColours?.join(", ") ?? "N/A"}
+            {isEditing ? (
+              <input
+                value={editedProduct.availableColours?.join(", ") ?? ""}
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    availableColours: e.target.value.split(","),
+                  })
+                }
+              />
+            ) : (
+              productData.availableColours?.join(", ") ?? "N/A"
+            )}
           </li>
           <li>
-            <strong>Fragile:</strong> {productData.fragile ? "Yes" : "No"}
+            <strong>Fragile:</strong>
+            {isEditing ? (
+              <select
+                value={editedProduct.fragile ? "Yes" : "No"}
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    fragile: e.target.value === "Yes",
+                  })
+                }
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            ) : productData.fragile ? (
+              "Yes"
+            ) : (
+              "No"
+            )}
           </li>
           <li>
             <strong>Packaging Size:</strong>{" "}
-            {productData.packagingSize?.join(" x ") ?? "N/A"} cm
+            {isEditing ? (
+              <input
+                value={
+                  Array.isArray(productData.availableColours)
+                    ? productData.availableColours.join(", ")
+                    : "N/A"
+                }
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    packagingSize: e.target.value.split(" x "),
+                  })
+                }
+              />
+            ) : (
+              productData.packagingSize?.join(" x ") ?? "N/A"
+            )}{" "}
+            cm
           </li>
           <li>
             <strong>Filling Material:</strong>{" "}
-            {productData.fillingMaterial?.required
-              ? "Required"
-              : "Not Required"}
-            , Amount: {productData.fillingMaterial?.amount}
+            {isEditing ? (
+              <>
+                Required:
+                <select
+                  value={
+                    editedProduct.fillingMaterial?.required
+                      ? "Required"
+                      : "Not Required"
+                  }
+                  onChange={(e) =>
+                    setEditedProduct({
+                      ...editedProduct,
+                      fillingMaterial: {
+                        ...editedProduct.fillingMaterial,
+                        required: e.target.value === "Required",
+                      },
+                    })
+                  }
+                >
+                  <option value="Required">Required</option>
+                  <option value="Not Required">Not Required</option>
+                </select>
+                , Amount:
+                <input
+                  type="number"
+                  value={editedProduct.fillingMaterial?.amount || ""}
+                  onChange={(e) =>
+                    setEditedProduct({
+                      ...editedProduct,
+                      fillingMaterial: {
+                        ...editedProduct.fillingMaterial,
+                        amount: parseInt(e.target.value),
+                      },
+                    })
+                  }
+                />
+              </>
+            ) : (
+              <>
+                {productData.fillingMaterial.required
+                  ? "Required"
+                  : "Not Required"}
+                , Amount: {productData.fillingMaterial.amount}
+              </>
+            )}
           </li>
           <li>
-            <strong>Shelf:</strong> {productData.shelf}
+            <strong>Shelf:</strong>
+            {isEditing ? (
+              <input
+                value={editedProduct.shelf || ""}
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    shelf: e.target.value,
+                  })
+                }
+              />
+            ) : (
+              productData.shelf || "N/A"
+            )}
           </li>
           <li>
             <strong>Supplier Number:</strong>{" "}
-            {productData.supplierNumber ?? "N/A"}
+            {isEditing ? (
+              <input
+                value={editedProduct.supplierNumber || ""}
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    supplierNumber: e.target.value,
+                  })
+                }
+              />
+            ) : (
+              productData.supplierNumber ?? "N/A"
+            )}
           </li>
           <li>
-            <strong>Status:</strong> {productData.status}
+            <strong>Status:</strong>
+            {isEditing ? (
+              <select
+                value={editedProduct.status}
+                onChange={(e) =>
+                  setEditedProduct({
+                    ...editedProduct,
+                    status: e.target.value,
+                  })
+                }
+              >
+                <option value="in_stock">In Stock</option>
+                <option value="almost_sold_out">Almost Sold Out</option>
+                <option value="reordered">Reordered</option>
+                <option value="packing_station">Packing Station</option>
+                <option value="in_delivery">In Delivery</option>
+              </select>
+            ) : (
+              productData.status
+            )}
           </li>
           <li>
             <strong>Barcode:</strong>
@@ -226,7 +462,8 @@ function ProductDetails() {
             <ul className="nested-list">
               <li>Manufacturer: {productData.description?.manufacturer}</li>
               <li>
-                Long Description: {productData.description?.longDescription?.join(", ") ?? "N/A"}
+                Long Description:{" "}
+                {productData.description?.longDescription?.join(", ") ?? "N/A"}
               </li>
               <li>
                 Materials:{" "}
@@ -239,13 +476,20 @@ function ProductDetails() {
             </ul>
           </li>
         </ul>
+        {/* Buttons for Supervisor-Control */}
         {isSupervisor && (
           <div className="supervisor-controls">
-            <button
-              onClick={() => handleEditProduct(productData.productNumber)}
-            >
-              Edit Product
-            </button>
+            {isEditing ? (
+              <>
+                {/* Formularfelder für die Bearbeitung */}
+                <button onClick={handleSaveChanges}>
+                  Saved Changes
+                </button>
+                <button onClick={() => setIsEditing(false)}>Cancel</button>
+              </>
+            ) : (
+              <button onClick={handleEditProduct}>Product Edit</button>
+            )}
             <button
               onClick={() => handleDeleteProduct(productData.productNumber)}
             >
@@ -293,7 +537,7 @@ function ProductCard({ product, onEditBarcode }) {
           />
         </div>
       )}
-      <Link to={`/product-detail/${product.productNumber}`}>
+      <Link to={`/product-detail/${product.productNumber}`} className="product-link">
         Product Details
       </Link>
       {/* <button onClick={() => onEditBarcode(product.productNumber)}>

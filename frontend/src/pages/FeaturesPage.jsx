@@ -24,7 +24,7 @@ function FeaturesPage() {
             <div className="feature-container">
                 <FeatureCard title="Products" icon="📦" link="/product-overview" />
                 <FeatureCard title="Dashboard" icon="📊" link="/dashboard" />
-                <FeatureCard title="Delivery" icon="🚚" link="/delivery-details" />
+                <FeatureCard title="Delivery" icon="🚚" link="/delivery" />
             
                 <FeatureCard title="User Management" icon="👤" link="/user-management" />
                

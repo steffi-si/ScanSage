@@ -169,7 +169,7 @@ export  function ProductCard({ product, onEditBarcode }) {
           />
         </div>
       )}
-      <Link to={`/product-detail/${product.productNumber}`}>Product Details</Link>
+      <Link to={`/product-detail/${product.productNumber}`} className="product-link">Product Details</Link>
       {/* <button onClick={() => onEditBarcode(product.productNumber)}>Edit Barcode</button> */}
     </div>
   );

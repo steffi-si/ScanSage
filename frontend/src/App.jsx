@@ -6,6 +6,7 @@ import Header from "./views/Header.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import { AuthProvider, useAuth } from "./context/useAuthContext.jsx";
 import FeaturesPage from "./pages/FeaturesPage.jsx";
+import Delivery from "./pages/Delivery.jsx";
 import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
@@ -51,6 +52,14 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
                 <ProductDetails />
+              </PrivateRoute>
+            }
+          />
+          <Route 
+            path="/delivery" 
+            element={
+              <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
+                <Delivery />
               </PrivateRoute>
             }
           />

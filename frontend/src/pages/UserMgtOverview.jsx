@@ -87,9 +87,9 @@ function UserMgtOverview() {
           Next
         </button>
       </div>
-      <div>
+      {/* <div>
         <button className="back-button" onClick={() => navigate("/features")}>Back to Features</button>
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -126,6 +126,7 @@ function FilterComponent({ onFilterChange , filterRole, filterDepartment}) {
         <option value="admin">Admin</option>
         <option value="manager">Manager</option>
         <option value="user">User</option>
+        <option value="supervisor">Supervisor</option>
       </select>
       <select value={filterDepartment} onChange={(e) => onFilterChange(e.target.value)}>
         <option value="">All Departments</option>

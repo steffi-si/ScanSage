@@ -19,11 +19,11 @@ function Header() {
                 <img src="/images/Logowithslogan.png" alt="Logo" />
                 <h1 className="slogan">Your Warehouse - Our Commitment</h1>
             </div>
-            <nav>
+            <nav className="onclick-button">
                 {isLoggedIn ? (
                     <>
-                       <button onClick={() => navigate("/features")}>Back to Features</button>
-                       <button onClick={handleLogout}>Logout</button>
+                       <button className="feature-button"onClick={() => navigate("/features")}>Back to Features</button>
+                       <button className="logout-button"onClick={handleLogout}>Logout</button>
                     
                     </>
                 ) : (
