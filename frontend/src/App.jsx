@@ -10,6 +10,7 @@ import Delivery from "./pages/Delivery.jsx";
 import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import { BarcodeGenerator } from "./components/BarcodeReader.jsx";
 import Layout from "./Layout.jsx";
 import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
@@ -43,6 +44,7 @@ function App() {
             path="/product-overview" 
             element={
               <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
+                <BarcodeGenerator />
                 <ProductOverview />
               </PrivateRoute>
             } 

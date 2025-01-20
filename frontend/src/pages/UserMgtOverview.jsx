@@ -10,24 +10,39 @@ function UserMgtOverview() {
   const [filterDepartment, setFilterDepartment] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+
+  }, [filterRole, filterDepartment, currentPage]);
 
   useEffect(() => {
-    applyFilters();
+    const filteredData = users.filter((user) => {
+      return (
+        (!filterRole || user.authorisationRole.toLowerCase() === filterRole.toLowerCase()) &&
+        (!filterDepartment || user.department === filterDepartment) &&
+        (user.firstName.toLowerCase().includes(filterRole.toLowerCase()) || user.lastName.toLowerCase().includes(filterRole.toLowerCase()))
+      );
+    });
+    setFilteredUsers(filteredData);
   }, [users, filterRole, filterDepartment]);
 
   const fetchUsers = async () => {
     try {
       const token = getToken();
-      const response = await fetch("http://localhost:3000/api/users", {
+      const queryParams = new URLSearchParams({
+        role: filterRole,
+        department: filterDepartment,
+        page: currentPage,
+      });
+      const response = await fetch(`http://localhost:3000/api/users?${queryParams.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response);
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
@@ -35,20 +50,22 @@ function UserMgtOverview() {
       setUsers(data.users);
       setTotalPages(Math.ceil(data.totalCount / data.limit));
     } catch (error) {
-      console.error(error);
+      setError(`Error fetching users: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const applyFilters = () => {
-    let result = users;
-    if (filterRole) {
-      result = result.filter(user => user.authorisationRole === filterRole);
-    }
-    if (filterDepartment) {
-      result = result.filter(user => user.department === filterDepartment);
-    }
-    setFilteredUsers(result);
-  };
+  // const applyFilters = () => {
+  //   let result = users;
+  //   if (filterRole) {
+  //     result = result.filter(user => user.authorisationRole === filterRole);
+  //   }
+  //   if (filterDepartment) {
+  //     result = result.filter(user => user.department === filterDepartment);
+  //   }
+  //   setFilteredUsers(result);
+  // };
 
   const handleFilterChange = (filterType, value) => {
     if (filterType === 'role') {
@@ -87,9 +104,6 @@ function UserMgtOverview() {
           Next
         </button>
       </div>
-      {/* <div>
-        <button className="back-button" onClick={() => navigate("/features")}>Back to Features</button>
-      </div> */}
     </div>
   );
 }
@@ -121,14 +135,14 @@ function UserCard({ user }) {
 function FilterComponent({ onFilterChange , filterRole, filterDepartment}) {
   return (
     <div className="filter-component">
-      <select value={filterRole} onChange={(e) => onFilterChange(e.target.value)}>
+      <select value={filterRole} onChange={(e) => onFilterChange('role', e.target.value)}>
         <option value="">All Roles</option>
         <option value="admin">Admin</option>
         <option value="manager">Manager</option>
         <option value="user">User</option>
         <option value="supervisor">Supervisor</option>
       </select>
-      <select value={filterDepartment} onChange={(e) => onFilterChange(e.target.value)}>
+      <select value={filterDepartment} onChange={(e) => onFilterChange('department',e.target.value)}>
         <option value="">All Departments</option>
         <option value="warehouse">Warehouse</option>
         <option value="logistics">Logistics</option>

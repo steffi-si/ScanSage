@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
 import { BarcodeScanner } from "react-barcode-scanner";
 import 'react-barcode-scanner/polyfill';
+// import { useDevices } from 'react-device-detect';
+import {BarcodeReader, BarcodeGenerator} from '../components/BarcodeReader';
 
 function ProductOverview() {
   const [products, setProducts] = useState([]);
@@ -12,6 +14,8 @@ function ProductOverview() {
   const [statusFilter, setStatusFilter] = useState("");
   const [showScanner, setShowScanner] = useState(false);
   const [scannedCode, setScannedCode] = useState("");
+  // const { isMobile, isTablet, isLaptop, isDesktop } = useDevices();
+  const [randomBarcode, setRandomBarcode] = useState("generate");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,21 +56,21 @@ function ProductOverview() {
   const generateNewProductWithBarcode = async () => {
     try {
       const newBarcode = Date.now().toString();
-      const newProduct = {
-        name: "New Product",
-        category: 'category1',
-        price: { sellingPrice: 0, purchasePrice: 0 },
-        expressDispatch: false,
-        fragile: false,
-        packagingSize: [10, 10, 10],
-        fillingMaterial: { required: false, amount: 0 },
-        shelf: "A1",
-        status: "in stock",
-        barcode: {
-          value: newBarcode,
-          format: "CODE128"
-        }
-      };
+      // const newProduct = {
+      //   name: "New Product",
+      //   category: 'category1',
+      //   price: { sellingPrice: 0, purchasePrice: 0 },
+      //   expressDispatch: false,
+      //   fragile: false,
+      //   packagingSize: [10, 10, 10],
+      //   fillingMaterial: { required: false, amount: 0 },
+      //   shelf: "A1",
+      //   status: "in stock",
+      //   barcode: {
+      //     value: newBarcode,
+      //     format: "CODE128"
+      //   }
+      // };
       const response = await fetch("http://localhost:3000/api/products/with-barcode", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -109,6 +113,7 @@ function ProductOverview() {
       <div className="toolbar">
         <button onClick={() => setShowScanner(!showScanner)}>
           {showScanner ? 'Close Scanner' : 'Open Scanner'}
+
         </button>
         <button onClick={generateNewProductWithBarcode}>Generate New Product with Barcode</button>
         {showScanner && <BarcodeScanner onDetected={handleScan} />}
@@ -134,7 +139,7 @@ function ProductOverview() {
           ))
         )}
       </div>
-      <button onClick={() => navigate("/features")}>Back to Features</button>
+      {/* <button onClick={() => navigate("/features")}>Back to Features</button> */}
     </div>
   );
 }
@@ -170,7 +175,6 @@ export  function ProductCard({ product, onEditBarcode }) {
         </div>
       )}
       <Link to={`/product-detail/${product.productNumber}`} className="product-link">Product Details</Link>
-      {/* <button onClick={() => onEditBarcode(product.productNumber)}>Edit Barcode</button> */}
     </div>
   );
 }
@@ -199,28 +203,6 @@ function FilterComponent({ onFilterChange, onStatusChange }) {
   );
 }
 
-function BarcodeReader({onScan, onError}) {
-  return(
-    <div className="barcode-scanner">
-      <BarcodeScanner
-        options={{formats: ["EAN-13", "UPC", "CODE128", "QR"]}}
-        onDetected={(result) => {
-          if (result) {
-            onScan(result.text);
-          }
-        }}
-        onError={onError}
-      />
-    </div>
-  )
-}
 
-function BarcodeGenerator() {
-  return (
-    <div className="barcode-generator">
-      <Barcode value="1234567890" format='CODE128'/>
-    </div>
-  );
-}
 
 export default ProductOverview;
