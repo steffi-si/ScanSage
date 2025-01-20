@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import updateShelfProporties from "../middleware/shelfMiddleware.js";
 import Delivery from "./delivery.js";
 import Product from "./product.js";
 import User from "./user.js";
@@ -8,17 +9,17 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 
 // Subschema for shelf  
 const shelfSchema = new mongoose.Schema({
-    shelfNumber: {
-        type: Number,
-        unique: true,
-        index: true,
-        required: true
-    },
     shelfCode: {
         type: String,
         unique: true,
         index: true,
-        required: true
+        required: true,
+        validate: {
+            validator: function (v) {
+                return /^[A-Z]\d+$/.test(v);
+            },
+            message: props => `${props.value} is not a valid shelf code!`
+        }
     },
     capacity: {
         type: Number,
@@ -70,10 +71,6 @@ const warehouseSchema = new mongoose.Schema({
         required: true,
         min: [0, "Total capacity must not be negative."]
     },
-    assignedUser: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
     deliveryList: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Delivery"
