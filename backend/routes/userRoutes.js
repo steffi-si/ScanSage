@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
             .skip((pageNumber - 1) * limitNumber)
             .exec();
         
-        res.json({ users, totalCount, page, limit });
+        res.json({ users, totalCount, page: pageNumber, limit: limitNumber });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }
