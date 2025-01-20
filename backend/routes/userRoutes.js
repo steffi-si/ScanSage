@@ -8,6 +8,8 @@ router.get("/", async (req, res) => {
     try {
         const { role, department, page = 1, limit = 10 } = req.query;
         const query = {};
+        const pageNumber = parseInt(page, 10) || 1;
+        const limitNumber = parseInt(limit, 10) || 10;
 
         if (role) {
             query.authorisationRole = role;
@@ -18,8 +20,8 @@ router.get("/", async (req, res) => {
 
         const totalCount = await User.countDocuments(query);
         const users = await User.find(query)
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
+            .limit(limitNumber)
+            .skip((pageNumber - 1) * limitNumber)
             .exec();
         
         res.json({ users, totalCount, page, limit });
