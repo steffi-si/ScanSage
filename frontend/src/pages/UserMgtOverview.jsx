@@ -42,7 +42,6 @@ function UserMgtOverview() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
       if (!response.ok) {
         throw new Error("Something went wrong!");
       }
@@ -56,16 +55,7 @@ function UserMgtOverview() {
     }
   };
 
-  // const applyFilters = () => {
-  //   let result = users;
-  //   if (filterRole) {
-  //     result = result.filter(user => user.authorisationRole === filterRole);
-  //   }
-  //   if (filterDepartment) {
-  //     result = result.filter(user => user.department === filterDepartment);
-  //   }
-  //   setFilteredUsers(result);
-  // };
+  
 
   const handleFilterChange = (filterType, value) => {
     if (filterType === 'role') {
