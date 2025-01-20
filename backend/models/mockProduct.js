@@ -34,6 +34,8 @@ const mockProducts = [
         { key: "neckline", value: "Crew  neck" },
       ],
     },
+    amount: 723,
+    minAmount: 100
   },
   {
     name: "Dress",
@@ -63,6 +65,8 @@ const mockProducts = [
       weight: { value: 0.5, unit: "kg" },
       customAttributes: [{ key: "size", value: ["S", "M", "L", "XL"] }],
     },
+    amount: 527,
+    minAmount: 90
   },
   {
     name: "Sunglasses",
@@ -92,6 +96,8 @@ const mockProducts = [
       materials: ["plastic"],
       weight: { value: 0.1, unit: "kg" },
     },
+    amount: 312,
+    minAmount: 50
   },
   {
     name: "Hat",
@@ -121,6 +127,8 @@ const mockProducts = [
       weight: { value: 0.3, unit: "kg" },
       customAttributes: [{ key: "size", value: ["S", "M", "L", "XL"] }],
     },
+    amount: 381,
+    minAmount: 50
   },
   {
     name: "Socks",
@@ -149,6 +157,8 @@ const mockProducts = [
       materials: ["cotton", "polyester"],
       weight: { value: 0.2, unit: "kg" },
     },
+    amount: 455,
+    minAmount: 100
   },
   {
     name: "Shoes",
@@ -181,6 +191,8 @@ const mockProducts = [
         { key: "neckline", value: "Crew  neck" },
       ],
     },
+    amount: 120,
+    minAmount: 20
   },
   {
     name: "TV",
@@ -227,6 +239,8 @@ const mockProducts = [
         { key: "refreshRate", value: "120Hz" },
       ],
     },
+    amount: 43,
+    minAmount: 10
   },
   {
     name: "Smartphone",
@@ -265,6 +279,8 @@ const mockProducts = [
       warranty: { duration: 2, unit: "years" },
       customAttributes: [{ key: "screenSize", value: 5.8 }],
     },
+    amount: 26,
+    minAmount: 10
   },
   {
     name: "Laptop",
@@ -304,6 +320,8 @@ const mockProducts = [
       warranty: { duration: 2, unit: "years" },
       customAttributes: [{ key: "screenSize", value: 14 }],
     },
+    amount: 74,
+    minAmount: 15
   },
   {
     name: "Headphones",
@@ -349,6 +367,8 @@ const mockProducts = [
         { key: "impedance", value: "32 Ohm" },
       ],
     },
+    amount: 23,
+    minAmount: 10
   },
   {
     name: "Coffee Maker",
@@ -385,6 +405,8 @@ const mockProducts = [
         unit: "cm",
       },
     },
+    amount: 51,
+    minAmount: 20
   },
   {
     name: "Blender",
@@ -424,6 +446,8 @@ const mockProducts = [
         { key: "capacity", value: "1.5L" },
       ],
     },
+    amount: 87,
+    minAmount: 20
   },
   {
     name: "Yoga Mat",
@@ -464,6 +488,8 @@ const mockProducts = [
         { key: "non-slip", value: true },
       ],
     },
+    amount: 107,
+    minAmount: 20
   },
   {
     name: "Running Shoes",
@@ -498,6 +524,8 @@ const mockProducts = [
         { key: "type", value: "Neutral running" },
       ],
     },
+    amount: 201,
+    minAmount: 30
   },
   {
     name: "Microwave",
@@ -539,6 +567,8 @@ const mockProducts = [
         { key: "power", value: "800W" },
       ],
     },
+    amount: 92,
+    minAmount: 20
   },
   {
     name: "Backpack",
@@ -579,6 +609,8 @@ const mockProducts = [
         { key: "waterproof", value: true },
       ],
     },
+    amount: 54,
+    minAmount: 20
   },
   {
     name: "Desk Lamp",
@@ -618,6 +650,8 @@ const mockProducts = [
         { key: "colorTemperature", value: "3000K-6500K adjustable" },
       ],
     },
+    amount: 72,
+    minAmount: 25
   },
   {
     name: "Water Bottle",
@@ -659,6 +693,8 @@ const mockProducts = [
         { key: "dishwasherSafe", value: true },
       ],
     },
+    amount: 63,
+    minAmount: 20
   },
   {
     name: "Gaming Mouse",
@@ -700,6 +736,8 @@ const mockProducts = [
         { key: "programmableButtons", value: 8 },
       ],
     },
+    amount: 47,
+    minAmount: 30
   },
   {
     name: "Toaster",
@@ -741,6 +779,8 @@ const mockProducts = [
         { key: "functions", value: ["defrost", "reheat", "cancel"] },
       ],
     },
+    amount: 23,
+    minAmount: 20
   },
   {
     name: "Fitness Tracker",
@@ -790,6 +830,8 @@ const mockProducts = [
         },
       ],
     },
+    amount: 31,
+    minAmount: 20
   },
   {
     name: "Wireless Earbuds",
@@ -839,6 +881,8 @@ const mockProducts = [
         },
       ],
     },
+    amount: 59,
+    minAmount: 25
   },
   {
     name: "Hiking Boots",
@@ -882,6 +926,8 @@ const mockProducts = [
         },
       ],
     },
+    amount: 34,
+    minAmount: 20
   },
   {
     name: "Smart Watch",
@@ -923,6 +969,8 @@ const mockProducts = [
         { key: "compatibility", value: ["iOS", "Android"] },
       ],
     },
+    amount: 70,
+    minAmount: 20
   },
   {
     name: "Air Fryer",
@@ -968,6 +1016,8 @@ const mockProducts = [
         },
       ],
     },
+    amount: 23,
+    minAmount: 15
   },
   {
     name: "Bluetooth Speaker",
@@ -1012,6 +1062,8 @@ const mockProducts = [
         },
       ],
     },
+    amount: 27,
+    minAmount: 20
   },
   {
     name: "Yoga Block",
@@ -1052,6 +1104,8 @@ const mockProducts = [
         { key: "nonSlip", value: true },
       ],
     },
+    amount: 15,
+    minAmount: 5
   },
   {
     name: "Portable charger",
@@ -1092,6 +1146,8 @@ const mockProducts = [
         { key: "fastCharging", value: true },
       ],
     },
+    amount: 64,
+    minAmount: 25
   },
   {
     name: "Portable charger",
@@ -1133,6 +1189,8 @@ const mockProducts = [
         { key: "wirelessCharging", value: true },
       ],
     },
+    amount: 20,
+    minAmount: 10
   },
   {
     name: "Resistance Bands",
@@ -1176,6 +1234,8 @@ const mockProducts = [
         },
       ],
     },
+    amount: 30,
+    minAmount: 10
   },
 ];
 
@@ -1194,6 +1254,8 @@ async function createMockProducts() {
           ...productData.barcode,
           value: productNumber,
         },
+        amount: productData.amount,
+        minAmount: productData.minAmount
       });
 
       await product.save();

@@ -50,7 +50,7 @@ const barcodeSchema = new mongoose.Schema({
     },
     format: {
         type: String,
-        enum: ["EAN13", "UPC", "CODE128", "QR"],
+        enum: ["EAN-13", "UPC", "CODE128", "QR"],
         default: "CODE128"
     },
     lastScanned: {
@@ -201,10 +201,12 @@ const productSchema = new mongoose.Schema({
             }
         }
     },
-    shelf: {
-		type: mongoose.Schema.Types.ObjectId,
-        ref: "Warehouse.shelves"
-	},
+    // shelf: {
+	// 	type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Warehouse.shelves"
+	// },
+    // String placeholder for missing shelf ref
+    shelf: { type: String },
     warehouse: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Warehouse"
@@ -233,6 +235,16 @@ const productSchema = new mongoose.Schema({
             "delay_in_delivery"
         ],
         default: "in_stock"
+    },
+    amount: {
+        type: Number,
+        required: true,
+        min: [0, "The amount of product must not be negative."]
+    },
+    minAmount: {
+        type: Number,
+        required: true,
+        min: [0, "The minimum amount of product must not be negative."]
     },
     barcode: barcodeSchema,
     description: descriptionSchema
