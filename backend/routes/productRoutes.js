@@ -152,8 +152,9 @@ router.post("/goodsReceipt", authMiddleware, async (req, res) => {
             { productNumber },
             {
                 $set: { "barcode.lastScanned": new Date() },
-                $inc: {}
-            }
+                $inc: { stock: quantity }
+            },
+            { new: true }
         );
 
         res.json({ message: "Barcode scanned successfully", product: updatedProduct });
