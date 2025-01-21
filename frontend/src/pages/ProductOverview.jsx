@@ -55,21 +55,7 @@ function ProductOverview() {
   const generateNewProductWithBarcode = async () => {
     try {
       const newBarcode = Date.now().toString();
-      // const newProduct = {
-      //   name: "New Product",
-      //   category: 'category1',
-      //   price: { sellingPrice: 0, purchasePrice: 0 },
-      //   expressDispatch: false,
-      //   fragile: false,
-      //   packagingSize: [10, 10, 10],
-      //   fillingMaterial: { required: false, amount: 0 },
-      //   shelf: "A1",
-      //   status: "in stock",
-      //   barcode: {
-      //     value: newBarcode,
-      //     format: "CODE128"
-      //   }
-      // };
+     
       const response = await fetch("http://localhost:3000/api/products/with-barcode", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
