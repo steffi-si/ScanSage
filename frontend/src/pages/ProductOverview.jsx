@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
 import { BarcodeScanner } from "react-barcode-scanner";
 import 'react-barcode-scanner/polyfill';
-// import { useDevices } from 'react-device-detect';
-import {BarcodeReader, BarcodeGenerator} from '../components/BarcodeReader';
+// import {BarcodeReader, BarcodeGenerator} from '../components/BarcodeReader';
 
 function ProductOverview() {
   const [products, setProducts] = useState([]);
@@ -12,9 +11,9 @@ function ProductOverview() {
   const [error, setError] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("allproducts");
   const [statusFilter, setStatusFilter] = useState("");
+  const [showOrderView, setShowOrderView] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [scannedCode, setScannedCode] = useState("");
-  // const { isMobile, isTablet, isLaptop, isDesktop } = useDevices();
   const [randomBarcode, setRandomBarcode] = useState("generate");
   const navigate = useNavigate();
 
@@ -111,11 +110,14 @@ function ProductOverview() {
   return (
     <div className="product-overview">
       <div className="toolbar">
-        <button onClick={() => setShowScanner(!showScanner)}>
-          {showScanner ? 'Close Scanner' : 'Open Scanner'}
-
+        <button onClick={() => setShowOrderView(!showOrderView)}>
+          {showOrderView ? 'Close Orderview' : 'Open Orderview'}
+           
         </button>
-        <button onClick={generateNewProductWithBarcode}>Generate New Product with Barcode</button>
+
+         {showOrderView && <OrderOverview />}
+
+        <button onClick={generateNewProductWithBarcode}> New Product with Barcode</button>
         {showScanner && <BarcodeScanner onDetected={handleScan} />}
         <FilterComponent
           onFilterChange={setCategoryFilter}
@@ -201,6 +203,79 @@ function FilterComponent({ onFilterChange, onStatusChange }) {
       </select>
     </div>
   );
+}
+
+function OrderOverview() {
+  const [orderedProducts, setOrderedProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showScanner, setShowScanner] = useState(false);
+  const [orderType, setOrderType] = useState("");
+  const [showBarcodeModal, setShowBarcodeModal] = useState(false);
+
+  useEffect(() => {
+    fetchOrderedProducts();
+  }, []);
+
+  const fetchOrderedProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/orders");
+      if (!response.ok) {
+        throw new Error("Failed to fetch orders");
+      }
+      const data = await response.json();
+      setOrderedProducts(data.orders);
+    } catch (error) {
+      console.error("Error fetching orders: ", error);
+    }
+  };
+
+  const handleOrderTypeChange = (type) => {
+    setOrderType(type);
+    if (type === "new") {
+      setSelected(null);
+      //setShowScanner(true);
+    } else {
+      //setShowScanner(false);
+    }
+  };
+
+  const handleShowBarcode = (product) => {
+    setSelectedProduct(product);
+    setShowBarcodeModal(true);
+  };
+
+
+
+  return(
+    <div className="order-overview">
+      <h2>Order Overview</h2>
+      <select 
+        value={orderType} 
+        onChange={(e) => handleOrderTypeChange(e.target.value)}
+      >
+        <option value="existingProduct">Existing Products</option>
+        <option value="newProduct">New Products</option>
+      </select>
+
+      {/* {showScanner && <BarcodeScanner onScan={handleScan} />} */}
+
+      <div className="product-list">
+        {orderedProducts.map(product => (
+          <div key={product.id} className="product-item">
+            <p>{product.name}</p>
+            <button onClick={() => handleShowBarcode(product)}>Show Barcode</button>
+          </div>
+        ))}
+      </div>
+
+      {showBarcodeModal && selectedProduct && (
+        <div className="barcode-modal">
+          <Barcode value={selectedProduct.ean} />
+          <button onClick={() => setShowBarcodeModal(false)}>Close</button>
+        </div>
+      )}
+    </div>
+  )
 }
 
 

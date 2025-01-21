@@ -73,7 +73,7 @@ function ProductDetails() {
         manufacturer: productData.description?.manufacturer || "",
         longDescription: productData.description?.longDescription || [],
         materials: productData.description?.materials || [],
-      }
+      },
     });
   };
 
@@ -158,7 +158,11 @@ function ProductDetails() {
         <ProductCard product={productData} onEditBarcode={() => {}} />
       </div>
 
-      <div className={`product-details-container card ${isEditing ? 'editing-mode' : ''}`}>
+      <div
+        className={`product-details-container card ${
+          isEditing ? "editing-mode" : ""
+        }`}
+      >
         <h2>Product Details</h2>
         <ul>
           <li>
@@ -460,18 +464,112 @@ function ProductDetails() {
           <li>
             <strong>Description:</strong>
             <ul className="nested-list">
-              <li>Manufacturer: {productData.description?.manufacturer}</li>
               <li>
-                Long Description:{" "}
-                {productData.description?.longDescription?.join(", ") ?? "N/A"}
+                <strong>Manufacturer:</strong>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editedProduct.description?.manufacturer || ""}
+                    onChange={(e) =>
+                      setEditedProduct({
+                        ...editedProduct,
+                        description: {
+                          ...editedProduct.description,
+                          manufacturer: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                ) : (
+                  productData.description?.manufacturer || "N/A"
+                )}
               </li>
               <li>
-                Materials:{" "}
-                {productData.description?.materials?.join(", ") ?? "N/A"}
+                <strong>Long Description:</strong>
+                {isEditing ? (
+                  <textarea
+                    value={
+                      editedProduct.description?.longDescription?.join("\n") ||
+                      ""
+                    }
+                    onChange={(e) =>
+                      setEditedProduct({
+                        ...editedProduct,
+                        description: {
+                          ...editedProduct.description,
+                          longDescription: e.target.value.split("\n"),
+                        },
+                      })
+                    }
+                  />
+                ) : (
+                  productData.description?.longDescription?.join(", ") || "N/A"
+                )}
               </li>
               <li>
-                Weight: {productData.description?.weight?.value}{" "}
-                {productData.description?.weight?.unit}
+                <strong>Materials:</strong>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={
+                      editedProduct.description?.materials?.join(", ") || ""
+                    }
+                    onChange={(e) =>
+                      setEditedProduct({
+                        ...editedProduct,
+                        description: {
+                          ...editedProduct.description,
+                          materials: e.target.value.split(", "),
+                        },
+                      })
+                    }
+                  />
+                ) : (
+                  productData.description?.materials?.join(", ") || "N/A"
+                )}
+              </li>
+              <li>
+                <strong>Weight:</strong>
+                {isEditing ? (
+                  <>
+                    <input
+                      type="number"
+                      value={editedProduct.description?.weight?.value || ""}
+                      onChange={(e) =>
+                        setEditedProduct({
+                          ...editedProduct,
+                          description: {
+                            ...editedProduct.description,
+                            weight: {
+                              ...editedProduct.description?.weight,
+                              value: e.target.value,
+                            },
+                          },
+                        })
+                      }
+                    />
+                    <input
+                      type="text"
+                      value={editedProduct.description?.weight?.unit || ""}
+                      onChange={(e) =>
+                        setEditedProduct({
+                          ...editedProduct,
+                          description: {
+                            ...editedProduct.description,
+                            weight: {
+                              ...editedProduct.description?.weight,
+                              unit: e.target.value,
+                            },
+                          },
+                        })
+                      }
+                    />
+                  </>
+                ) : (
+                  `${productData.description?.weight?.value || ""} ${
+                    productData.description?.weight?.unit || ""
+                  }`
+                )}
               </li>
             </ul>
           </li>
@@ -482,9 +580,7 @@ function ProductDetails() {
             {isEditing ? (
               <>
                 {/* Formularfelder für die Bearbeitung */}
-                <button onClick={handleSaveChanges}>
-                  Saved Changes
-                </button>
+                <button onClick={handleSaveChanges}>Saved Changes</button>
                 <button onClick={() => setIsEditing(false)}>Cancel</button>
               </>
             ) : (
@@ -497,9 +593,6 @@ function ProductDetails() {
             </button>
           </div>
         )}
-        <button onClick={() => navigate("/scan-barcode")}>
-          Scan New Product
-        </button>
       </div>
     </div>
   );
@@ -537,7 +630,10 @@ function ProductCard({ product, onEditBarcode }) {
           />
         </div>
       )}
-      <Link to={`/product-detail/${product.productNumber}`} className="product-link">
+      <Link
+        to={`/product-detail/${product.productNumber}`}
+        className="product-link"
+      >
         Product Details
       </Link>
       {/* <button onClick={() => onEditBarcode(product.productNumber)}>

@@ -4,6 +4,7 @@ import Barcode from "react-barcode";
 
 function BarcodeReader({onScan, onError}) {
   const [scanResult, setScanresult] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
 
   const handleScan = (result) => {
     if (result) {
@@ -23,16 +24,17 @@ function BarcodeReader({onScan, onError}) {
         }}
         onError={onError}
       />
+      {scanResult && <p>Scan result: {scanResult}</p>}
     </div>
   );
 }
 
 function BarcodeGenerator() {
-  const [barcodeValue, setBarcodeValue] = useState('0bd7a2f5-f277-4837-a7fa-a21b281d5e87'); 
+  const [barcodeValue, setBarcodeValue] = useState(''); 
 
   return (
     <div className="barcode-generator">
-      <Barcode value={barcodeValue} format='CODE128'/> 
+      {barcodeValue && <Barcode value={barcodeValue} format='CODE128'/> }
     </div>
   );
 }
@@ -40,5 +42,5 @@ function BarcodeGenerator() {
 export {BarcodeReader, BarcodeGenerator};
 
 
-//youtube video for example
+
 
