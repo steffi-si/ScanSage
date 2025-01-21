@@ -246,6 +246,11 @@ const productSchema = new mongoose.Schema({
         required: true,
         min: [0, "The minimum amount of product must not be negative."]
     },
+    orderedQuantity: {
+        type: Number,
+        min: [0, "The ordered quantity must not be a negative value."],
+        default: 0
+    },
     barcode: barcodeSchema,
     description: descriptionSchema
 }, { timestamps: true });

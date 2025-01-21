@@ -66,7 +66,8 @@ const mockProducts = [
       customAttributes: [{ key: "size", value: ["S", "M", "L", "XL"] }],
     },
     amount: 527,
-    minAmount: 90
+    minAmount: 90,
+    orderedQuantity: 0
   },
   {
     name: "Sunglasses",
@@ -280,7 +281,8 @@ const mockProducts = [
       customAttributes: [{ key: "screenSize", value: 5.8 }],
     },
     amount: 26,
-    minAmount: 10
+    minAmount: 10,
+    orderedQuantity: 0
   },
   {
     name: "Laptop",
@@ -610,7 +612,8 @@ const mockProducts = [
       ],
     },
     amount: 54,
-    minAmount: 20
+    minAmount: 20,
+    orderedQuantity: 0
   },
   {
     name: "Desk Lamp",
@@ -882,7 +885,8 @@ const mockProducts = [
       ],
     },
     amount: 59,
-    minAmount: 25
+    minAmount: 25,
+    orderedQuantity: 0
   },
   {
     name: "Hiking Boots",
@@ -927,7 +931,8 @@ const mockProducts = [
       ],
     },
     amount: 34,
-    minAmount: 20
+    minAmount: 20,
+    orderedQuantity: 0
   },
   {
     name: "Smart Watch",

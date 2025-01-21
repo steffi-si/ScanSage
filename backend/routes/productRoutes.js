@@ -139,44 +139,23 @@ router.delete("/:productNumber", authMiddleware, async (req, res) => {
     }
 });
 
-// // API edit barcode
-// router.patch("/:productNumber/barcode", async (req, res) => {
-//     try {
-//         const { value, format } = req.body;
-//         const updatedProduct = await Product.findOneAndUpdate(
-//             { productNumber: req.params.productNumber },
-//             {
-//                 $set: {
-//                     "barcode.value": value,
-//                     "barcode.format": format,
-//                     "barcode.lastScanned": new Date()
-//                 }
-//             },
-//             { new: true }
-//         );
-
-//         if (!updatedProduct) {
-//             return res.status(404).json({ message: "Product not found" });
-//         }
-
-//         res.json({ updatedProduct });
-//     } catch (err) {
-//         res.status(500).json({ message: "Server error" });
-//     }
-// });
-
-// API simulate scan
-router.post("/:productNumber/scan", async (req, res) => {
+// API scan product
+router.post("/goodsReceipt", authMiddleware, async (req, res) => {
     try {
+        const { productNumber, quantity = 1 } = req.body;
+
+        if (!productNumber) {
+            return res.status(400).json({ message: "Missing product number in request body." });
+        }
+
         const updatedProduct = await Product.findOneAndUpdate(
-            { productNumber: req.params.productNumber },
-            { $set: { "barcode.lastScanned": new Date() } },
+            { productNumber },
+            {
+                $set: { "barcode.lastScanned": new Date() },
+                $inc: { stock: quantity }
+            },
             { new: true }
         );
-
-        if (!updatedProduct) {
-            return res.status(404).json({ message: "Product not found" });
-        }
 
         res.json({ message: "Barcode scanned successfully", product: updatedProduct });
     } catch (err) {
@@ -227,6 +206,20 @@ router.post("/", authMiddleware, async (req, res) => {
             return res.status(400).json({ message: "Product with this number or barcode already exists" });
         }
 
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
+// API find products with status olmost_sold_out
+router.get("/almost_sold_out", async (req,  res) => {
+    try {
+        const products = await Product.find({
+            status: "almost_sold_out",
+            orderedQuantity: { $gt: 0 }
+        })
+
+        res.json(products);
+    } catch (err) {
         res.status(500).json({ message: "Server error", error: err.message });
     }
 });
