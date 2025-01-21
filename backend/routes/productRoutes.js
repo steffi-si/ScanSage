@@ -76,6 +76,26 @@ router.get("/", async (req, res) => {
     }
 });
 
+// API find products with status olmost_sold_out
+router.get("/almost_sold_out", async (req,  res) => {
+    try {
+        const products = await Product.find({
+            status: "almost_sold_out"
+        });
+
+        console.log("Log query result:", products);
+
+        if (products.length === 0) {
+            console.log("No products found with status 'almost_sold_out'");
+            return res.status(404).json({ message: "No products found with status almost_sold_out" });
+        }
+
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
 // API product details
 router.get("/:productNumber", async (req, res) => {
     try {
@@ -206,20 +226,6 @@ router.post("/", authMiddleware, async (req, res) => {
             return res.status(400).json({ message: "Product with this number or barcode already exists" });
         }
 
-        res.status(500).json({ message: "Server error", error: err.message });
-    }
-});
-
-// API find products with status olmost_sold_out
-router.get("/almost_sold_out", async (req,  res) => {
-    try {
-        const products = await Product.find({
-            status: "almost_sold_out",
-            // orderedQuantity: { $gt: 0 }
-        });
-
-        res.json(products);
-    } catch (err) {
         res.status(500).json({ message: "Server error", error: err.message });
     }
 });
