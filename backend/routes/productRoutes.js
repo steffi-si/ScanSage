@@ -215,8 +215,8 @@ router.get("/almost_sold_out", async (req,  res) => {
     try {
         const products = await Product.find({
             status: "almost_sold_out",
-            orderedQuantity: { $gt: 0 }
-        })
+            // orderedQuantity: { $gt: 0 }
+        });
 
         res.json(products);
     } catch (err) {
