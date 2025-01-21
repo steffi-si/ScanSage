@@ -148,7 +148,7 @@ router.post("/goodsReceipt", authMiddleware, async (req, res) => {
             return res.status(400).json({ message: "Missing product number in request body." });
         }
 
-        const product = await Product.findOneAndUpdate(
+        const updatedProduct = await Product.findOneAndUpdate(
             { productNumber },
             {
                 $set: { "barcode.lastScanned": new Date() },
