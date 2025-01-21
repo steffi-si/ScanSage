@@ -83,10 +83,7 @@ router.get("/almost_sold_out", async (req,  res) => {
             status: "almost_sold_out"
         });
 
-        console.log("Log query result:", products);
-
         if (products.length === 0) {
-            console.log("No products found with status 'almost_sold_out'");
             return res.status(404).json({ message: "No products found with status almost_sold_out" });
         }
 
