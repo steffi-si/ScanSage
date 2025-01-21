@@ -210,7 +210,7 @@ button[type="submit"]:disabled {
 }
 
 button {
-  background-color: #ccc; 
+  background-color: #b8b8b8; 
   color: #fff; 
   border: none;
   padding: 10px 15px;
@@ -420,7 +420,7 @@ button:hover {
 .supervisor-controls button {
   margin-top: 25px;
   padding: 10px 15px;
-  background-color: #797b7c;
+  background-color: #b8b8b8; 
   color: rgb(231, 229, 229);
   border: none;
   border-radius: 10px;
@@ -460,6 +460,9 @@ button:hover {
 .user-mgt-overview {
   padding: 20px;
   background-color: #F7F7F7;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   margin-bottom: 110px;
 }
 
@@ -476,8 +479,8 @@ button:hover {
 
 .user-card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
+  gap: 15px;
 }
 
 .user-card {
@@ -491,6 +494,7 @@ button:hover {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
   transition: transform 0.2s;
 }
+
 
 .user-card:hover {
   transform: scale(1.05);
@@ -512,6 +516,20 @@ button:hover {
   color: #666;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pagination button {
+  background-color: #b8b8b8; 
+  margin: 0 10px;
+}
+
+.pagination button:hover {
+  background-color: #66b3a4;
+}
 
 /*Popup-Message Styling */
 -popup-overlay {

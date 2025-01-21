@@ -74,7 +74,7 @@ function ProductOverview() {
       const response = await fetch("http://localhost:3000/api/products/with-barcode", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProduct)
+        body: JSON.stringify()
       });
       if (!response.ok) {
         throw new Error("Failed to create product");
