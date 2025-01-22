@@ -66,13 +66,14 @@ const descriptionSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    model: {
+    longDescription: {
         type: String,
+        required: true,
+        maxlength: [2000, "Product name must not be longer than 1000 characters"],
         trim: true
     },
-    description: {
+    model: {
         type: String,
-        maxlength: [2000, "Description must not exceed 2000 characters."],
         trim: true
     },
     features: [{
@@ -245,11 +246,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: [0, "The minimum amount of product must not be negative."]
-    },
-    orderedQuantity: {
-        type: Number,
-        min: [0, "The ordered quantity must not be a negative value."],
-        default: 0
     },
     barcode: barcodeSchema,
     description: descriptionSchema
