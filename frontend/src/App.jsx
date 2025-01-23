@@ -4,20 +4,19 @@ import "./App.css";
 import PrivateRoute from "./PrivateRoute.jsx";
 import Header from "./views/Header.jsx";
 import LoginForm from "./components/LoginForm.jsx";
-import { AuthProvider, useAuth } from "./context/useAuthContext.jsx";
+import { AuthProvider } from "./context/useAuthContext.jsx";
 import FeaturesPage from "./pages/FeaturesPage.jsx";
 import Delivery from "./pages/Delivery.jsx";
 import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
-import { BarcodeGenerator } from "./components/BarcodeReader.jsx";
 import Layout from "./Layout.jsx";
 import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
 
 function App() {
   const [popupMessage, setPopupMessage] = useState('');
-  // const { isLoggedIn, role } = useAuth();
+ 
 
   return (
     <>
@@ -44,7 +43,6 @@ function App() {
             path="/product-overview" 
             element={
               <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
-                <BarcodeGenerator />
                 <ProductOverview />
               </PrivateRoute>
             } 

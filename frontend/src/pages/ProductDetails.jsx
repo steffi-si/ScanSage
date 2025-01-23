@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuthContext";
 import Barcode from "react-barcode";
-// import { ProductCard } from "./ProductOverview";
+import ProductCard from "../components/ProductCard";
+
 
 function ProductDetails() {
   const navigate = useNavigate();
@@ -489,7 +490,7 @@ function ProductDetails() {
                 {isEditing ? (
                   <textarea
                     value={
-                      editedProduct.description?.longDescription?.join("\n") ||
+                      editedProduct.description?.longDescription ||
                       ""
                     }
                     onChange={(e) =>
@@ -497,13 +498,13 @@ function ProductDetails() {
                         ...editedProduct,
                         description: {
                           ...editedProduct.description,
-                          longDescription: e.target.value.split("\n"),
+                          longDescription: e.target.value,
                         },
                       })
                     }
                   />
                 ) : (
-                  productData.description?.longDescription?.join(", ") || "N/A"
+                  productData.description?.longDescription || "N/A"
                 )}
               </li>
               <li>
@@ -598,49 +599,5 @@ function ProductDetails() {
   );
 }
 
-function ProductCard({ product, onEditBarcode }) {
-  return (
-    <div className="product-card">
-      <h3>{product.name || "No name"}</h3>
-      <p>Status: {product.status || "No status"}</p>
-      <p>
-        Price:{" "}
-        {product.price?.sellingPrice?.value
-          ? `${product.price.sellingPrice.value.toFixed(2)} ${
-              product.price.sellingPrice.currency
-            }`
-          : "Price not available"}
-      </p>
-      {product.barcode && (
-        <div className="barcode-container">
-          <Barcode
-            value={product.barcode.value}
-            format={product.barcode.format}
-            width={1}
-            height={100}
-            displayValue={true}
-            font="bold 8px Arial"
-            textAlign="center"
-            textPosition="bottom"
-            textMargin={2}
-            fontSize={20}
-            background="#ffffff"
-            lineColor="#000000"
-            margin={10}
-          />
-        </div>
-      )}
-      <Link
-        to={`/product-detail/${product.productNumber}`}
-        className="product-link"
-      >
-        Product Details
-      </Link>
-      {/* <button onClick={() => onEditBarcode(product.productNumber)}>
-        Edit Barcode
-      </button> */}
-    </div>
-  );
-}
 
 export default ProductDetails;

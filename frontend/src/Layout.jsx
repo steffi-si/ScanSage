@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import Header from "./views/Header.jsx";
+// import Header from "./views/Header.jsx";
 import Footer from "./views/Footer.jsx";
 
 function Layout() {
