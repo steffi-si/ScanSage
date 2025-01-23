@@ -76,7 +76,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// API find products with status olmost_sold_out
+// API find products with status almost_sold_out
 router.get("/almost_sold_out", async (req,  res) => {
     try {
         const products = await Product.find({
@@ -90,6 +90,39 @@ router.get("/almost_sold_out", async (req,  res) => {
         res.json(products);
     } catch (err) {
         res.status(500).json({ message: "Server error", error: err.message });
+    }
+});
+
+// API scan product
+router.post("/scan", async (req, res) => {
+    try {
+        const { productNumber, orderedQuantity } = req. body;
+
+        if (!productNumber) {
+            return res.status(400).json({ message: "Product number is required" });
+        }
+        if (!orderedQuantity || orderedQuantity < 1) {
+            return res.status(400).json({ message: "Ordered quantity must be at least 1." });;
+        }
+
+        // Update in database
+        const updatedProduct = await Product.findOneAndUpdate(
+            { productNumber: productNumber },
+            { $inc: { amount: orderedQuantity } },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found." });
+        }
+
+        // send updated product
+        res.json({
+            message: "Product amount updated successfully.",
+            product: updatedProduct
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
     }
 });
 
@@ -151,30 +184,6 @@ router.delete("/:productNumber", authMiddleware, async (req, res) => {
             message: "Product deleted successfully",
             user: res.locals.user
         });
-    } catch (err) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-
-// API scan product
-router.post("/goodsReceipt", authMiddleware, async (req, res) => {
-    try {
-        const { productNumber, quantity = 1 } = req.body;
-
-        if (!productNumber) {
-            return res.status(400).json({ message: "Missing product number in request body." });
-        }
-
-        const updatedProduct = await Product.findOneAndUpdate(
-            { productNumber },
-            {
-                $set: { "barcode.lastScanned": new Date() },
-                $inc: { stock: quantity }
-            },
-            { new: true }
-        );
-
-        res.json({ message: "Barcode scanned successfully", product: updatedProduct });
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }

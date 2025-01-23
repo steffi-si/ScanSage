@@ -21,10 +21,10 @@ const deliverySchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    assignedUser: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    },
+    // assignedUser: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "User"
+    // },
     products: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
