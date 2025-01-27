@@ -11,6 +11,7 @@ import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import StatisticsPage from "./pages/StatisticsPage.jsx";
+import BarcodeScanner from "./components/BarcodeScanner.jsx";
 import Layout from "./Layout.jsx";
 import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
@@ -44,6 +45,7 @@ function App() {
             path="/product-overview" 
             element={
               <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
+                <BarcodeScanner />
                 <ProductOverview />
               </PrivateRoute>
             } 

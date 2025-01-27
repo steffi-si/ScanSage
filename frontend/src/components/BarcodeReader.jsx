@@ -18,12 +18,13 @@ function BarcodeReader({ onScan, onError }) {
       <button onClick={() => setIsScanning(!isScanning)}>
         {isScanning ? "Stop Scanning" : "Start Scanning"}
       </button>
-      {isScanning && (
+      {/* {isScanning && (
         <div style={{ width: "100%", maxWidth: "640px", margin: "0 auto" }}>
           <BarcodeScanner onDetected={handleScan} />
         </div>
-      )}
-      {scanResult && <p>Scan result: {scanResult}</p>}
+      )} */}
+      <BarcodeScanner />
+      {/* {scanResult && <p>Scan result: {scanResult}</p>} */}
     </div>
   );
 }
