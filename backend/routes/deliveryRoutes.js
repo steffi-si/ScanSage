@@ -6,7 +6,7 @@ const router = express.Router();
 // API delivery overview
 router.get("/", async (req, res) => {
     try {
-        const { status, deliveryVan, assignedUser, page= 1, limit = 10 } = req.query;
+        const { status, deliveryVan, page= 1, limit = 10 } = req.query;
         const query = {};
 
         if (status) {
@@ -15,13 +15,10 @@ router.get("/", async (req, res) => {
         if (deliveryVan) {
             query.deliveryVan = deliveryVan;
         }
-        if (assignedUser) {
-            query.assignedUser = assignedUser;
-        }
 
         const totalCount = await Delivery.countDocuments(query);
         const deliveries = await Delivery.find(query)
-            .populate("assignedUser products")
+            .populate("products")
             .limit(Number(limit))
             .skip((Number(page) - 1) * Number(limit))
             .exec();
@@ -36,7 +33,7 @@ router.get("/", async (req, res) => {
 router.get("/:deliveryNumber", async (req, res) => {
     try {
         const delivery = await Delivery.findOne({ deliveryNumber: req.params.deliveryNumber })
-            .populate("assignedUser products");
+            .populate("products");
         
         if (!delivery) {
             return res.status(404).json({ message: "Delivery not found." })
@@ -55,7 +52,7 @@ router.put("/:deliveryNumber", async (req, res) => {
             { deliveryNumber: req.params.deliveryNumber },
             req.body,
             { new: true }
-        ).populate("assignedUser products");
+        ).populate("products");
 
         if (!updatedDelivery) {
             return res.status(404).json({ message: "Delivery not found." });
@@ -112,7 +109,7 @@ router.patch("/:deliveryNumber/status", async (req, res) => {
             { deliveryNumber: req.params.deliveryNumber },
             { $set: { status } },
             { new: true }
-        ).populate("assignedUser products");
+        ).populate("products");
 
         if (!updatedDelivery) {
             return res.status(404).json({ message: "Delivery not found." });
