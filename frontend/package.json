@@ -16,7 +16,9 @@
     "react-barcode-scanner": "^3.0.1",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.0.2"
+    "react-media-devices": "^1.1.5",
+    "react-router-dom": "^7.0.2",
+    "react-zxing": "^2.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
