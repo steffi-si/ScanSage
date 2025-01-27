@@ -11,7 +11,11 @@ function Delivery() {
   useEffect(() => {
     const fetchDeliveries = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/deliveries");
+        const response = await fetch("http://localhost:3000/api/deliveries" ,{
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch delivery");
         }

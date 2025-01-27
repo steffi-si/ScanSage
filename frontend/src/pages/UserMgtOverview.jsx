@@ -109,9 +109,9 @@ function UserCard({ user }) {
   return (
     <div className="user-card">
       <div className="user-icon">👤</div>
-      <h2>
+      <h3>
         {user.firstName} {user.lastName}
-      </h2>
+      </h3>
       <p><strong>Role:</strong> {user.authorisationRole}</p>
       <p><strong>Personnel Number:</strong> {user.personnelNumber}</p>
       <p>

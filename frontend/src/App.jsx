@@ -10,6 +10,7 @@ import Delivery from "./pages/Delivery.jsx";
 import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import StatisticsPage from "./pages/StatisticsPage.jsx";
 import Layout from "./Layout.jsx";
 import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
@@ -68,6 +69,14 @@ function App() {
             element={
               <PrivateRoute allowedRoles={['admin', 'manager']}>
                 <UserMgtOverview />
+              </PrivateRoute>
+            }
+          />
+          <Route 
+            path="/statistics" 
+            element={
+              <PrivateRoute allowedRoles={['user', 'admin', 'manager','supervisor']}>
+                <StatisticsPage />
               </PrivateRoute>
             }
           />
