@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
 
         if (token && userRole) {
             setIsLoggedIn(true);
+            setIsAuthenticated(true);
             setRole(userRole);
         }
     }, []);
@@ -21,6 +22,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem("token", token);
         localStorage.setItem("role", userRole);
         setIsLoggedIn(true);
+        setIsAuthenticated(true);
         setRole(userRole);
     }
 
@@ -51,4 +53,4 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
     return useContext(AuthContext);
-};
+}; 

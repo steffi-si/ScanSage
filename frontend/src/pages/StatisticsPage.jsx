@@ -37,7 +37,7 @@ function StatisticsPage() {
               <label for="Radio1"></label>
             </div>
           </div>
-          <div class="timeline-item-right">
+          <div class="timeline-item-right glass-card">
             <img src={item.image} alt={item.title} class="icon-st" />
             <h3><strong>{item.title}</strong></h3>
             <p>{item.description}</p>

@@ -1,12 +1,24 @@
 import {useAuth } from '../context/useAuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 function Header() {
-    //
     const { isLoggedIn , logout } = useAuth();
     const navigate = useNavigate();  
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            logout();
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [logout]);
 
     function handleLogout() {
         logout();
@@ -23,7 +35,7 @@ function Header() {
                 {isLoggedIn ? (
                     <>
                        <button className="feature-button"onClick={() => navigate("/features")}>Back to Features</button>
-                       <button className="logout-button"onClick={handleLogout}>Logout</button>
+                       <button className="logout-button icon-only"onClick={handleLogout}> ◡ Logout</button>
                     
                     </>
                 ) : (

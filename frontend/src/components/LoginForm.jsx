@@ -94,8 +94,8 @@ function LoginForm() {
             <button type="submit" disabled={isLoading}>
                 {isLoading ? 'Login started...' : 'Login'}
             </button>
+            {error && <div className="error-message" role="alert">{error}</div>}
         </form>
-        {error && <div className="error-message" role="alert">{error}</div>}
     </div>
     );
 }

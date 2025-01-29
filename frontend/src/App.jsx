@@ -11,13 +11,17 @@ import ProductOverview from "./pages/ProductOverview.jsx";
 import UserMgtOverview from "./pages/UserMgtOverview.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import StatisticsPage from "./pages/StatisticsPage.jsx";
-import BarcodeScanner from "./components/BarcodeScanner.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import Layout from "./Layout.jsx";
 import Popup from "./views/Popup.jsx";
 import Footer from "./views/Footer.jsx";
 
 function App() {
   const [popupMessage, setPopupMessage] = useState('');
+
+  const handleScan =() => {
+    window.open("http://localhost:5174" + result, "_blank");
+  }
  
 
   return (
@@ -45,11 +49,18 @@ function App() {
             path="/product-overview" 
             element={
               <PrivateRoute allowedRoles={['user', 'manager', 'admin', 'supervisor']}>
-                <BarcodeScanner />
                 <ProductOverview />
               </PrivateRoute>
             } 
           />
+           <Route 
+              path="/dashboard" 
+              element={
+                <PrivateRoute allowedRoles={['admin', 'supervisor']}>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
           <Route 
             path="/product-detail/:productNumber" 
             element={

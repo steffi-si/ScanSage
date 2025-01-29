@@ -4,7 +4,6 @@ import Barcode from "react-barcode";
 import BarcodeScanner from "../components/BarcodeScanner";
 import ProductCard from "../components/ProductCard";
 import "react-barcode-scanner/polyfill";
-import OrderOverview from "../views/OrderOverview";
 // import BarcodeReader from '../components/BarcodeReader';
 
 function ProductOverview() {
@@ -13,7 +12,6 @@ function ProductOverview() {
   const [error, setError] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("allproducts");
   const [statusFilter, setStatusFilter] = useState("");
-  const [showOrderView, setShowOrderView] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [scannedCode, setScannedCode] = useState("");
   // const [randomBarcode, setRandomBarcode] = useState("generate");
@@ -135,23 +133,15 @@ function ProductOverview() {
 
   return (
     <div className="product-overview">
+      <h2>Product Overview</h2>
       <div className="toolbar">
-        <button onClick={() => setShowOrderView(!showOrderView)}>
-          {showOrderView ? "Close Orderview" : "Open Orderview"}
-        </button>
-
-        {showOrderView && <OrderOverview />}
 
         <button onClick={() => setShowScanner(true)}>
           Scan Product
         </button>
-
-
-        <button onClick={generateNewProductWithBarcode}>
-          {" "}
-          New Product with Barcode
-        </button>
-        {showScanner && <BarcodeScanner onDetected={handleScan} />}
+        {showScanner && (
+          <BarcodeScanner onDetected={handleScan} onClose={() => setShowScanner(false) } /> 
+        )}
         <FilterComponent
           onFilterChange={setCategoryFilter}
           onStatusChange={setStatusFilter}
@@ -174,7 +164,6 @@ function ProductOverview() {
           ))
         )}
       </div>
-      {/* <button onClick={() => navigate("/features")}>Back to Features</button> */}
     </div>
 
   );
