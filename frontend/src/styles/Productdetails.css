@@ -1,0 +1,222 @@
+/*Product-details*/
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 40px;
+  padding-bottom: 110px;
+}
+
+.product-details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.product-details-container.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #c8d6d131;
+  border: 2px solid #d0d9d6;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 70%;
+  margin-bottom: 20px;
+}
+
+.product-details {
+  margin-bottom: 30px;
+  background-color: #bfcec931;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 40%;
+}
+
+.product-details-conatiner.card h2 {
+  color: #595a5c;
+  margin-bottom: 20px;
+  font-size: 24px;
+  border-bottom: 2px solid #0bc9a0;
+  padding-bottom: 10px;
+}
+
+.product-details-container.card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 4px;
+}
+
+.product-details-container.card li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+  font-size: 16px;
+  display: flex;
+  align-items: left;
+}
+
+.product-details-container.card strong {
+  font-weight: bold;
+  min-width: 120px;
+  color: #59b482;
+}
+
+.product-details-container.nested-list {
+  margin-left: 12px;
+}
+
+.supervisor-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  margin-top: 25px;
+}
+
+.supervisor-controls button {
+  margin-top: 25px;
+  padding: 10px 20px;
+  background-color: #646665;
+  color: rgb(231, 229, 229);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 16px;
+}
+
+.supervisor-controls button:hover {
+  background-color: #66b3a4;
+  transform: translateY(-2px);
+}
+
+/*Inline MOde Styling*/
+.product-details-container.editing-mode {
+  background-color: #bfcec931;
+  border: 1px solid #bdc3c7;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+}
+
+.product-details-container.editing-mode ul {
+  margin: 0;
+  padding: 0;
+}
+
+.product-details-container.editing-mode li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: baseline;
+}
+
+.product-details-container.editing-mode li strong {
+  min-width: 12px;
+  margin-right: 10px;
+}
+
+.editing-mode input,
+.editing-mode textarea,
+.editing-mode select {
+  flex: 1;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 2px 0;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+}
+
+.editing-mode input:focus,
+.editing-mode textarea:focus,
+.editing-mode select:focus {
+  border-color: #7bd3a0;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(112, 197, 157, 0.25);
+}
+
+.editing-mode .nested-list {
+  margin-left: 12px;
+  margin-top: 5px;
+}
+
+.editing-mode .edit-buttons {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.editing-mode .edit-buttons button {
+  margin-left: 15px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3 ease;
+}
+
+.editing-mode .edit-buttons .save-btn {
+  background-color: #4cc79eb9;
+  color: white;
+  border: none;
+}
+
+.editing-mode .edit-buttons .cancel-btn {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .product-details-container,
+  .product-details-container.card,
+  .product-details {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .product-details-container.card h2 {
+    font-size: 20px;
+  }
+
+  .product-details-container.card li,
+  .product-details-container.editing-mode li {
+    font-size: 14px;
+  }
+
+  .supervisor-controls button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .editing-mode input,
+  .editing-mode textarea,
+  .editing-mode select {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-details-container,
+  .product-details-container.card,
+  .product-details {
+    padding: 10px;
+  }
+
+  .product-details-container.card h2 {
+    font-size: 18px;
+  }
+
+  .product-details-container.card li,
+  .product-details-container.editing-mode li {
+    font-size: 12px;
+  }
+
+  .supervisor-controls button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}

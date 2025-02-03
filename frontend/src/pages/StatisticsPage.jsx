@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import '../styles/Statistics.css';
 
 function StatisticsPage() {
   const data = [

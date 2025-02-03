@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuthContext";
+import '../styles/Delivery.css';
 
 function Delivery() {
   const { getToken } = useAuth();
@@ -32,6 +33,7 @@ function Delivery() {
 
   return (
     <div className="deliveries-list">
+      <h2 className="section-title">Deliveries</h2>
       {deliveries.map((delivery) => (
         <DeliveryCard key={delivery.trackingNumber} delivery={delivery} />
       ))}

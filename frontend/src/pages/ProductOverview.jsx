@@ -4,7 +4,7 @@ import Barcode from "react-barcode";
 import BarcodeScanner from "../components/BarcodeScanner";
 import ProductCard from "../components/ProductCard";
 import "react-barcode-scanner/polyfill";
-// import BarcodeReader from '../components/BarcodeReader';
+import "../styles/Productoverview.css";
 
 function ProductOverview() {
   const [products, setProducts] = useState([]);
@@ -14,7 +14,6 @@ function ProductOverview() {
   const [statusFilter, setStatusFilter] = useState("");
   const [showScanner, setShowScanner] = useState(false);
   const [scannedCode, setScannedCode] = useState("");
-  // const [randomBarcode, setRandomBarcode] = useState("generate");
   const [isScanningNewProduct, setIsScanningNewProduct] = useState(false);
   const navigate = useNavigate();
 
@@ -133,7 +132,7 @@ function ProductOverview() {
 
   return (
     <div className="product-overview">
-      <h2>Product Overview</h2>
+      <h2 className="section-title">Product Overview</h2>
       <div className="toolbar">
 
         <button onClick={() => setShowScanner(true)}>

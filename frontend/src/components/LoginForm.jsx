@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth} from '../context/useAuthContext';
 import { useNavigate } from 'react-router-dom';
+import '../styles/LoginRegister.css';
 
 
 function LoginForm() {

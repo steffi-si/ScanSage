@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Barcode from "react-barcode";
+import '../styles/Productoverview.css';
 
 
 function ProductCard({ product, onEditBarcode }) {

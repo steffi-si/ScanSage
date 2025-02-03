@@ -1,51 +1,60 @@
 import { createContext, useContext, useState , useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [ isAuthenticated, setIsAuthenticated ] = useState(false);
+    const [authIsLoading, setAuthIsLoading] = useState(true);
     const [role, setRole] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        const userRole = localStorage.getItem("role");
+        const checkAuth = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const userRole = localStorage.getItem("role");
 
-        if (token && userRole) {
-            setIsLoggedIn(true);
-            setIsAuthenticated(true);
-            setRole(userRole);
-        }
+                if (token && userRole) {
+                    setIsLoggedIn(true);
+                    setRole(userRole);
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                console.error("Error reading from localStorage:", error);
+                logout();
+            } finally {
+                setAuthIsLoading(false);
+            }
+        };
+
+        checkAuth();
     }, []);
 
-    function login(token, userRole) {
+    async function login(token, userRole) {
         localStorage.setItem("token", token);
         localStorage.setItem("role", userRole);
         setIsLoggedIn(true);
-        setIsAuthenticated(true);
         setRole(userRole);
+        setAuthIsLoading(false);
     }
 
-    function logout() {
+    async function logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
-
         setIsLoggedIn(false);
-        setIsAuthenticated(false);
         setRole(null);
+        setAuthIsLoading(false);
+        navigate("/");
     }
-
-    // function isAuthenticated() {
-    //     return localStorage.getItem("token") !== null;
-
-    // }
 
     function getToken() {
         return localStorage.getItem("token");
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, logout,isAuthenticated, role, getToken }}>
+        <AuthContext.Provider value={{ isLoggedIn, login, logout, role, getToken , authIsLoading}}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuthContext.jsx";
+import '../styles/Usermgtoverview.css';
 
 function UserMgtOverview() {
   const { getToken } = useAuth();
@@ -61,7 +62,7 @@ function UserMgtOverview() {
 
   return (
     <div className="user-mgt-overview">
-    <h2>User Management Overview</h2>
+    <h2 className="section-title">User Management Overview</h2>
     
     <FilterComponent 
       onFilterChange={handleFilterChange} 

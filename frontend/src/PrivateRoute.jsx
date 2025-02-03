@@ -2,8 +2,11 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "./context/useAuthContext";
 
  function PrivateRoute({ children, allowedRoles }) {
-  const { isLoggedIn, role } = useAuth();
+  const { isLoggedIn, role, authIsLoading } = useAuth();
 
+  if (authIsLoading) {
+    return <p>Loading...</p>;
+  }
 
   if (!isLoggedIn) {
     console.log("Redirecting to login - not logged in");

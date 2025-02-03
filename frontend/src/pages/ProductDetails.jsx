@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuthContext";
 import Barcode from "react-barcode";
 import ProductCard from "../components/ProductCard";
+import '../styles/Productdetails.css';
+import '../styles/Productoverview.css';
 
 
 function ProductDetails() {
@@ -164,7 +166,7 @@ function ProductDetails() {
           isEditing ? "editing-mode" : ""
         }`}
       >
-        <h2>Product Details</h2>
+        <h2 className="section-title">Product Details</h2>
         <ul>
           <li>
             <strong>Name:</strong>
@@ -331,8 +333,8 @@ function ProductDetails() {
             {isEditing ? (
               <input
                 value={
-                  Array.isArray(productData.availableColours)
-                    ? productData.availableColours.join(", ")
+                  Array.isArray(productData.packagingSize)
+                    ? productData.packagingSize?.join("x") ?? ""
                     : "N/A"
                 }
                 onChange={(e) =>

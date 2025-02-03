@@ -1,4 +1,5 @@
 import { useState } from "react";
+import '../styles/Footer.css';
 
 function Footer() {
   return (
@@ -11,6 +12,9 @@ function Footer() {
           Contact:{" "}
           <a href="mailto:support@scansage.com">support@scansage.com</a>
         </p>
+      </div>
+      <div className="footer-bottom">
+        <p>Made with ❤️ by Steffi & Sophie</p>
       </div>
     </footer>
   );

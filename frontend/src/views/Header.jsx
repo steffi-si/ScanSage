@@ -2,23 +2,13 @@ import {useAuth } from '../context/useAuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import '../styles/Header.css';
 
 
 function Header() {
     const { isLoggedIn , logout } = useAuth();
     const navigate = useNavigate();  
 
-    useEffect(() => {
-        const handleBeforeUnload = () => {
-            logout();
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, [logout]);
 
     function handleLogout() {
         logout();
@@ -28,7 +18,7 @@ function Header() {
     return (
         <header>
             <div className="logo-container">
-                <img src="/images/Logowithslogan.png" alt="Logo" />
+                <img src="/img/Logowithslogan.png" alt="Logo" />
                 <h1 className="slogan">Your Warehouse - Our Commitment</h1>
             </div>
             <nav className="onclick-button">

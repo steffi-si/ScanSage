@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect , useState } from 'react';
 import { useAuth } from '../context/useAuthContext.jsx';
 import Popup from '../views/Popup.jsx';
+import '../styles/Featurespage.css';
 
 
 
@@ -20,7 +21,7 @@ function FeaturesPage() {
 
     return (
         <div className="features-page">
-            <h2>FeaturesPage</h2>
+            <h2 className="section-title">FeaturesPage</h2>
             <div className="feature-container">
                 <FeatureCard title="Products" icon="📦" link="/product-overview" allowedRoles={['user', 'manager', 'admin', 'supervisor']}  setPopupMessage={setPopupMessage} setShowPopup={setShowPopup} />
                 <FeatureCard title="Dashboard" icon="🏭" link="/dashboard" allowedRoles={[ 'admin', 'supervisor']}  setPopupMessage={setPopupMessage} setShowPopup={setShowPopup}/>
