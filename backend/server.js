@@ -23,4 +23,4 @@ app.use("/api/users", userRoutes);
 app.use("/api/deliveries", deliveryRoutes);
 app.use("/api/warehouses", warehousRoutes);
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

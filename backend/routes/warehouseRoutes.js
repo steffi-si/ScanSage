@@ -40,7 +40,7 @@ router.get("/:warehouseName", async (req, res) => {
     }
 });
 
-// API warehouse capaticity summary
+// API warehouse capacity summary
 router.get("/capacity/summary", async (req, res) => {
     try {
         const warehouse = await Warehouse.find();
