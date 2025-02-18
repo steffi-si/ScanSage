@@ -24,7 +24,7 @@ function FeaturesPage() {
             <h2 className="section-title">FeaturesPage</h2>
             <div className="feature-container">
                 <FeatureCard title="Products" icon="📦" link="/product-overview" allowedRoles={['user', 'manager', 'admin', 'supervisor']}  setPopupMessage={setPopupMessage} setShowPopup={setShowPopup} />
-                <FeatureCard title="Dashboard" icon="🏭" link="/dashboard" allowedRoles={[ 'admin', 'supervisor']}  setPopupMessage={setPopupMessage} setShowPopup={setShowPopup}/>
+                <FeatureCard title="Warehouse" icon="🏭" link="/dashboard" allowedRoles={[ 'admin', 'supervisor']}  setPopupMessage={setPopupMessage} setShowPopup={setShowPopup}/>
                 <FeatureCard title="Delivery" icon="🚚" link="/delivery" allowedRoles={['user', 'admin', 'supervisor']}   setPopupMessage={setPopupMessage} setShowPopup={setShowPopup}/>
             
                 <FeatureCard title="User Management" icon="👤" link="/user-management"  allowedRoles={[ 'manager', 'admin', 'supervisor']}  setPopupMessage={setPopupMessage} setShowPopup={setShowPopup}/>
