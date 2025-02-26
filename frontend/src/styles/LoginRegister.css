@@ -12,6 +12,7 @@
   align-items: center;
   min-height: 40vh;
   background-color: #f7f7f7;
+  margin-bottom: 50px;
 }
 
 .login-form {
@@ -110,6 +111,27 @@ button[type="submit"]:disabled {
   button[type="submit"] {
     padding: 0.6rem;
   }
+}
+
+.login-comment {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #888; 
+  text-align: center; 
+  font-style: italic; 
+  padding: 10px;
+  border-top: 1px solid #eee; 
+  margin-bottom: 130px;
+  min-height: 10vh;
+}
+
+.login-comment p {
+  margin: 5px 0; 
+}
+
+.login-comment-bold {
+  font-weight: bold;
+  color: black;
 }
 
 @media (max-width: 480px) {

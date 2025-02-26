@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/useAuthContext";
 import Barcode from "react-barcode";
 import ProductCard from "../components/ProductCard";
-import '../styles/Productdetails.css';
-import '../styles/Productoverview.css';
-
+import "../styles/Productdetails.css";
+import "../styles/Productoverview.css";
 
 function ProductDetails() {
   const navigate = useNavigate();
@@ -491,10 +490,7 @@ function ProductDetails() {
                 <strong>Long Description:</strong>
                 {isEditing ? (
                   <textarea
-                    value={
-                      editedProduct.description?.longDescription ||
-                      ""
-                    }
+                    value={editedProduct.description?.longDescription || ""}
                     onChange={(e) =>
                       setEditedProduct({
                         ...editedProduct,
@@ -597,9 +593,15 @@ function ProductDetails() {
           </div>
         )}
       </div>
+
+      <div className="supervisor-note">
+        <p>
+          <span className="supervisor-note-bold">Note:</span> Only supervisors have permission to edit and delete products.
+          These functions are not available for your admin account.
+        </p>
+      </div>
     </div>
   );
 }
-
 
 export default ProductDetails;

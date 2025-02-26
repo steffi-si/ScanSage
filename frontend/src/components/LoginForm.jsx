@@ -68,36 +68,45 @@ function LoginForm() {
     //     navigate('/dashboard');
     // }
 
-    return(
-        <div className="login-container">
-        <form onSubmit={handleLogin} className="login-form">
-            <h2>Login</h2>
-            <div className="form-group">
-                <label htmlFor="username">Username:</label>
-                <input 
-                    type="text" 
-                    id="username"
-                    value={userName} 
-                    onChange={(e) => setUsername(e.target.value)}
-                    aria-required="true"
-                />
+    return (
+        <div>
+            <div className="login-container">
+                <form onSubmit={handleLogin} className="login-form">
+                    <h2>Login</h2>
+                    <div className="form-group">
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={userName}
+                            onChange={(e) => setUsername(e.target.value)}
+                            aria-required="true"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            aria-required="true"
+                        />
+                    </div>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Login started...' : 'Login'}
+                    </button>
+                    {error && <div className="error-message" role="alert">{error}</div>}
+                </form>
             </div>
-            <div className="form-group">
-                <label htmlFor="password">Password:</label>
-                <input 
-                    type="password" 
-                    id="password"
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)}
-                    aria-required="true"
-                />
+            <div className="login-comment">
+                <p className="login-comment-bold">Welcome, dear visitor!</p>
+                <p>Our project is provided with a login for security reasons. The following data can be used to view the project:</p>
+                <p>Username:<span className="login-comment-bold">admin </span></p>
+                <p>Password:<span className="login-comment-bold"> testtest</span></p>
+                <p>Due to the need to protect data, it is not possible to provide an account for public access that shows all the functions of the web application. Nevertheless, we wish you a pleasant experience on our website.</p>
             </div>
-            <button type="submit" disabled={isLoading}>
-                {isLoading ? 'Login started...' : 'Login'}
-            </button>
-            {error && <div className="error-message" role="alert">{error}</div>}
-        </form>
-    </div>
+        </div>
     );
 }
 

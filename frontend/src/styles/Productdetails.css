@@ -199,6 +199,26 @@
   }
 }
 
+.supervisor-note {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #888;
+  text-align: center;
+  font-style: italic;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+.supervisor-note p {
+  margin: 5px 0;
+}
+
+.supervisor-note-bold {
+  font-weight: bold;
+  color: black;
+}
+
+
 @media (max-width: 480px) {
   .product-details-container,
   .product-details-container.card,
