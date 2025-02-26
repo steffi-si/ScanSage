@@ -11,6 +11,7 @@ const authMiddleware = async (req, res, next) => {
         // extract token from authorization header
         const token = req.header('Authorization').replace('Bearer ', '');
 
+        // check
         if (!token) {
             return res.status(401).json({ message: "Access denied. No token provided." });
         }
@@ -21,6 +22,7 @@ const authMiddleware = async (req, res, next) => {
         // find user in database
         const user = await User.findById(decoded.userId);
 
+        // check
         if (!user) {
             return res.status(401).json({ message: "Access denied. User not found." });
         }
@@ -44,7 +46,7 @@ const authMiddleware = async (req, res, next) => {
 };
 
 // API product overview
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
     try {
         const { category, name, status, barcode, page = 1, limit = 10 } = req.query;
         const query = {};
@@ -77,7 +79,7 @@ router.get("/", async (req, res) => {
 });
 
 // API find products with status almost_sold_out
-router.get("/almost_sold_out", async (req,  res) => {
+router.get("/almost_sold_out", authMiddleware, async (req,  res) => {
     try {
         const products = await Product.find({
             status: "almost_sold_out"
@@ -94,7 +96,7 @@ router.get("/almost_sold_out", async (req,  res) => {
 });
 
 // API scan product
-router.post("/scan", async (req, res) => {
+router.post("/scan", authMiddleware, async (req, res) => {
     try {
         const { productNumber, orderedQuantity } = req. body;
 
@@ -127,7 +129,7 @@ router.post("/scan", async (req, res) => {
 });
 
 // API product details
-router.get("/:productNumber", async (req, res) => {
+router.get("/:productNumber", authMiddleware, async (req, res) => {
     try {
         const product = await Product.findOne({ productNumber: req.params.productNumber });
 
